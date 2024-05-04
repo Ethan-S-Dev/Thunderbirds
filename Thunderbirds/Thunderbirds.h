@@ -288,9 +288,11 @@ private:
 		auto seconds = total_seconds_left % 60;
 
 		std::string infoBar = std::format("| Ship: {}, Time: {:02}:{:02}, Life: ", _screen.ActiveShipName(), minutes, seconds, lifes);
-		DrawString((_screenSize.X / 2) - (infoBar.size() / 2), 0, infoBar);
-		DrawString((_screenSize.X / 2) - (infoBar.size() / 2) + infoBar.size(), 0, lifes, FG_RED);
-		DrawString((_screenSize.X / 2) - (infoBar.size() / 2) + infoBar.size() + lifes.size(), 0, " |");
+		std::string end = " |";
+		auto sumLengths = infoBar.size() + lifes.size() + end.size();
+		DrawString((_screenSize.X / 2) - (sumLengths / 2), 0, infoBar);
+		DrawString((_screenSize.X / 2) - (sumLengths / 2) + infoBar.size(), 0, lifes, FG_RED);
+		DrawString((_screenSize.X / 2) - (sumLengths / 2) + infoBar.size() + lifes.size(), 0, end);
 	}
 	void DrawCameraFrame() {
 		auto frame = _camera.CameraConsoleRect();
