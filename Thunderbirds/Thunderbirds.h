@@ -28,6 +28,9 @@ private:
 	Rect _cameraConsoleRect;
 	Point _cameraConsoleFucsePoint;
 public:
+	Rect CameraConsoleRect() const {
+		return _cameraConsoleRect;
+	}
 	void Focuse(const Point freeMoveWorldFocusePoint) {
 		auto focusePointXDif = freeMoveWorldFocusePoint.X - _cameraWorldFocusePoint.X;
 		auto focusePointYDif = freeMoveWorldFocusePoint.Y - _cameraWorldFocusePoint.Y;
@@ -90,7 +93,8 @@ public:
 	}
 };
 
-
+constexpr auto CAMERA_TOP_MARGIN = 1;
+constexpr auto CAMERA_FRAME_COLOR = BG_DARK_BLUE;
 
 class Thunderbirds : public ConsoleGameEngine, public IPainter {
 private:
@@ -168,7 +172,12 @@ public:
 public:
 	void IPainter::Draw(const Point& point, char c) {
 		auto pointInConsole = _camera.TransformToConsole(point);
-		ConsoleGameEngine::Draw(pointInConsole.X, pointInConsole.Y, c);
+		int color = FG_WHITE;
+		if (pointInConsole.X == 0 || pointInConsole.X == _screenSize.X - 1 ||
+			pointInConsole.Y == CAMERA_TOP_MARGIN || pointInConsole.Y == _screenSize.Y - 1) {
+			color = color | CAMERA_FRAME_COLOR;
+		}
+		ConsoleGameEngine::Draw(pointInConsole.X, pointInConsole.Y, c, color);
 	}
 public:
 	ButtonState GetProcessButtonState(Button btn) const {
@@ -192,7 +201,7 @@ private:
 
 		_lifePointsLeft = _screen.StartingLifePoints();
 		Point consoleScreenSize(_screenSize.X, _screenSize.Y);
-		_camera.SetCameraConsoleRectangle(consoleScreenSize, 1);
+		_camera.SetCameraConsoleRectangle(consoleScreenSize, CAMERA_TOP_MARGIN);
 		SetCameraFocusePoint();
 	}
 	void ConsoleGameEngine::OnPhysicsUpdate(float elapsedTime) {
@@ -215,6 +224,7 @@ private:
 
 		Clear();
 		DrawGameInfo();
+		DrawCameraFrame();
 		_screen.Draw(*this);
 
 		if (_screen.State() == ScreenState::Lost) {
@@ -260,7 +270,7 @@ private:
 	}
 	void OnScreenResize() {
 		Point consoleScreenSize(_screenSize.X, _screenSize.Y);
-		_camera.SetCameraConsoleRectangle(consoleScreenSize, 1);
+		_camera.SetCameraConsoleRectangle(consoleScreenSize, CAMERA_TOP_MARGIN);
 	}
 private:
 	void DrawGameInfo() {
@@ -277,8 +287,24 @@ private:
 		auto minutes = total_seconds_left / 60;
 		auto seconds = total_seconds_left % 60;
 
-		std::string infoBar = std::format("| Ship: {}, Time: {:02}:{:02}, Life: {} |", _screen.ActiveShipName(), minutes, seconds, lifes);
+		std::string infoBar = std::format("| Ship: {}, Time: {:02}:{:02}, Life: ", _screen.ActiveShipName(), minutes, seconds, lifes);
 		DrawString((_screenSize.X / 2) - (infoBar.size() / 2), 0, infoBar);
+		DrawString((_screenSize.X / 2) - (infoBar.size() / 2) + infoBar.size(), 0, lifes, FG_RED);
+		DrawString((_screenSize.X / 2) - (infoBar.size() / 2) + infoBar.size() + lifes.size(), 0, " |");
+	}
+	void DrawCameraFrame() {
+		auto frame = _camera.CameraConsoleRect();
+		for (auto i = frame.LeftDown.X; i < frame.RightUp.X; i++)
+		{
+			ConsoleGameEngine::Draw(i, frame.RightUp.Y, ' ', CAMERA_FRAME_COLOR);
+			ConsoleGameEngine::Draw(i, frame.LeftDown.Y - 1, ' ', CAMERA_FRAME_COLOR);
+		}
+
+		for (auto i = frame.RightUp.Y ; i < frame.LeftDown.Y; i++)
+		{
+			ConsoleGameEngine::Draw(frame.RightUp.X - 1, i, ' ', CAMERA_FRAME_COLOR);
+			ConsoleGameEngine::Draw(frame.LeftDown.X, i, ' ', CAMERA_FRAME_COLOR);
+		}
 	}
 	void ShowMenu() {
 		std::string menu = "this is the menu";
