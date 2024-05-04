@@ -1,6 +1,4 @@
 #pragma once
-
-
 class Point {
 public:
 	static Point Zero;

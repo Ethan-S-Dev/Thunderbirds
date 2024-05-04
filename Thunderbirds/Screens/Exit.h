@@ -1,8 +1,8 @@
 #pragma once
-#include "Extensions.h"
+#include "../Extensions.h"
 #include "Ship.h"
 #include "IScreen.h"
-#include "IPainter.h"
+#include "../Core/IPainter.h"
 #include "GameObject.h"
 
 constexpr auto ZERO_EXIT_NAME = '0';

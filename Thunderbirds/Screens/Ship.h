@@ -1,9 +1,9 @@
 #pragma once
 #include <limits>
-#include "Extensions.h"
+#include "../Extensions.h"
 #include "IScreen.h"
-#include "IPainter.h"
-#include "IController.h"
+#include "../Core/IPainter.h"
+#include "../Core/IController.h"
 
 constexpr auto BIG_SHIP_NAME = '#';
 constexpr auto SMALL_SHIP_NAME = '@';

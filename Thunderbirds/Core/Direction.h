@@ -1,6 +1,4 @@
 #pragma once
-
-
 class Direction {
 public:
 	static const Direction Up;

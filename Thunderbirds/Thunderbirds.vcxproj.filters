@@ -5,24 +5,25 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Extensions.h" />
-    <ClInclude Include="Screen.h" />
-    <ClInclude Include="Block.h" />
-    <ClInclude Include="Point.h" />
-    <ClInclude Include="Ship.h" />
-    <ClInclude Include="Exit.h" />
+    <ClInclude Include="Screens\Screen.h" />
+    <ClInclude Include="Screens\Block.h" />
+    <ClInclude Include="Core\Point.h" />
+    <ClInclude Include="Screens\Ship.h" />
+    <ClInclude Include="Screens\Exit.h" />
     <ClInclude Include="ConsoleGameEngine.h" />
     <ClInclude Include="Thunderbirds.h" />
-    <ClInclude Include="IPainter.h" />
-    <ClInclude Include="GameObject.h" />
-    <ClInclude Include="IScreen.h" />
-    <ClInclude Include="IController.h" />
-    <ClInclude Include="Direction.h" />
+    <ClInclude Include="Core\IPainter.h" />
+    <ClInclude Include="Screens\GameObject.h" />
+    <ClInclude Include="Screens\IScreen.h" />
+    <ClInclude Include="Core\IController.h" />
+    <ClInclude Include="Core\Direction.h" />
+    <ClInclude Include="Core\Buttons.h" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Screens\level_2.screen" />
-    <None Include="Screens\level_5.screen" />
-    <None Include="Screens\level_1.screen" />
-    <None Include="Screens\level_3.screen" />
-    <None Include="Screens\level_4.screen" />
+    <None Include="Levels\level_2.screen" />
+    <None Include="Levels\level_5.screen" />
+    <None Include="Levels\level_1.screen" />
+    <None Include="Levels\level_3.screen" />
+    <None Include="Levels\level_4.screen" />
   </ItemGroup>
 </Project>

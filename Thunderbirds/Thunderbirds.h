@@ -3,9 +3,9 @@
 #include <chrono>
 
 #include "ConsoleGameEngine.h"
-#include "IPainter.h"
-#include "IController.h"
-#include "Screen.h"
+#include "Core/IPainter.h"
+#include "Core/IController.h"
+#include "Screens/Screen.h"
 
 class Rect {
 public:
