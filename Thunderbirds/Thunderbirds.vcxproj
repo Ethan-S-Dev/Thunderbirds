@@ -146,23 +146,23 @@
     <ClInclude Include="Extensions.h" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Screens\level1.screen">
+    <None Include="Screens\level_1.screen">
       <DeploymentContent>true</DeploymentContent>
       <FileType>Text</FileType>
     </None>
-    <None Include="Screens\level2.screen">
+    <None Include="Screens\level_2.screen">
       <DeploymentContent>true</DeploymentContent>
       <FileType>Text</FileType>
     </None>
-    <None Include="Screens\level10.screen">
+    <None Include="Screens\level_5.screen">
       <DeploymentContent>true</DeploymentContent>
       <FileType>Text</FileType>
     </None>
-    <None Include="Screens\level3.screen">
+    <None Include="Screens\level_3.screen">
       <DeploymentContent>true</DeploymentContent>
       <FileType>Text</FileType>
     </None>
-    <None Include="Screens\level4.screen" />
+    <None Include="Screens\level_4.screen" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

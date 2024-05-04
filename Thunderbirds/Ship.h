@@ -173,7 +173,7 @@ public:
 		Move(_direction, moved);
 	}
 	MoveResult CanBeMoved(Direction direction, std::vector<GameObject*>& entitiesNeedToBeMoved) const override {
-		// circular moving
+		// prevent circular move checks
 		if (contains(entitiesNeedToBeMoved, (GameObject*)this)) {
 			MoveResult res = {.CanBeMoved = true, .MoveCapacityCost = 0 };
 			return res;
@@ -213,6 +213,7 @@ public:
 			return;
 		}
 
+		// prevent circular move
 		if (contains(allReadyMoved, (GameObject*)this)) {
 			return;
 		}

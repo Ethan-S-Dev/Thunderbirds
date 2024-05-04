@@ -19,10 +19,10 @@
     <ClInclude Include="Direction.h" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Screens\level2.screen" />
-    <None Include="Screens\level10.screen" />
-    <None Include="Screens\level1.screen" />
-    <None Include="Screens\level3.screen" />
-    <None Include="Screens\level4.screen" />
+    <None Include="Screens\level_2.screen" />
+    <None Include="Screens\level_5.screen" />
+    <None Include="Screens\level_1.screen" />
+    <None Include="Screens\level_3.screen" />
+    <None Include="Screens\level_4.screen" />
   </ItemGroup>
 </Project>
