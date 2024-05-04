@@ -4,17 +4,18 @@
 #include "Point.h"
 #include "IController.h"
 
-enum class MoveFailReason {
+enum class MoveFailReason : int {
 	HitWall,
-	HitShip,
-	InsufficientCarryCapacity,
+	HitShip
 };
 
 typedef struct {
 	bool CanBeMoved;
-	MoveFailReason FailReason;
-	char CollidedWith;
-}MoveResult;
+	union {
+		MoveFailReason FailReason;
+		int MoveCapacityCost;
+	};
+} MoveResult;
 
 class GameObject {
 private:
@@ -30,13 +31,16 @@ public:
 	virtual void PhysicsUpdate(float elapsedTime, const IController& controller) {
 
 	}
-	virtual int CalculateBlocksCarryedBy(std::vector<char>& CarriedBlocksNames) const {
+	virtual int CalculateBlocksCarryedByEntity(std::vector<char>& carriedBlocksNames) const {
 		return 0;
 	}
-	virtual MoveResult CanBeMoved(Direction direction, int& carryCapacity) const {
+	virtual MoveResult CanBeMoved(Direction direction, std::vector<GameObject*>& entitiesInTheWay) const {
 		return { false };
 	}
-	virtual void Move(Direction direction) {
+	virtual MoveResult CanMoveBy(Direction direction) const {
+		return { false };
+	}
+	virtual void Move(Direction direction, std::vector<GameObject*>& allReadyMoved) {
 	}
 	virtual std::vector<GameObject*> FindEntitiesInTheWay(Direction direction) const {
 		return {};

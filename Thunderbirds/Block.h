@@ -43,51 +43,76 @@ public:
 	}
 	
 public:
-	std::vector<GameObject*> CollidedEntities(Direction direction) const override {
-		return FindEntitiesInTheWay(direction);
+	std::vector<GameObject*> FindEntitiesInTheWay(Direction direction) const override {
+		std::vector<GameObject*> entitiesInTheWay;
+		for (auto entity : _screen->Entities()) {
+			if (entity->IsEqual(*this)) {
+				continue;
+			}
+
+			if (HitObjectByMoving(direction, *entity)) {
+				entitiesInTheWay.push_back(entity);
+			}
+		}
+		return entitiesInTheWay;
 	}
 	void PhysicsUpdate(float elapsedTime, const IController& controller) override {
 		_tickCounter += elapsedTime;
 		if (_tickCounter < 1)
 			return;
 		_tickCounter -= 1;
-		int noCapacity = _positions.size();
-		if (CanBeMoved(Direction::Down, noCapacity).CanBeMoved) {
-			Move(Direction::Down);
+
+		if (CanMoveBy(Direction::Down).CanBeMoved) {
+			FallDownBy(1);
 		}
 	}
-	MoveResult CanBeMoved(Direction direction, int& carryCapacity) const override {
-		carryCapacity -= (int)_positions.size();
-		if (carryCapacity < 0) {
-			MoveResult result{ 0 };
-
-			// try to carry the blocks upwords with now carry capacity should make the ship die
-			if (direction.nY > 0) {
-				result.CanBeMoved = false;
-				result.FailReason = MoveFailReason::InsufficientCarryCapacity;
-				return result;
-			}
-
-			// try to push blocks to wall should not make the ship die
-			result = InnerCanBeMoved(direction, carryCapacity);
-			if (result.CanBeMoved) {
-				result.CanBeMoved = false;
-				result.FailReason = MoveFailReason::InsufficientCarryCapacity;
-			}
+	MoveResult CanBeMoved(Direction direction, std::vector<GameObject*>& entitiesInTheWay) const override {
+		MoveResult result = { .CanBeMoved = true, .MoveCapacityCost = (int)_positions.size() };
+		if (contains(entitiesInTheWay, (GameObject*)this)) {
+			result.MoveCapacityCost = 0;
 			return result;
 		}
 
-		return InnerCanBeMoved(direction, carryCapacity);
+		entitiesInTheWay.push_back((GameObject*)this);
+
+		if (direction.nX == 0 && direction.nY == 0) {
+			return result;
+		}
+
+		if (HitWallByMoving(direction)) {
+			result.CanBeMoved = false;
+			result.FailReason = MoveFailReason::HitWall;
+			return result;
+		}
+
+		auto entitiesInTheWayOfThis = FindEntitiesInTheWay(direction);
+		for (auto entity : entitiesInTheWayOfThis)
+		{
+			auto res = entity->CanBeMoved(direction, entitiesInTheWay);
+			if (!res.CanBeMoved) {
+				return res;
+			}
+
+			result.MoveCapacityCost += res.MoveCapacityCost;
+		}
+
+		return result;
 	}
-	void Move(Direction direction) override {
+	void Move(Direction direction, std::vector<GameObject*>& allReadyMoved) override {
 		if (direction.nX == 0 && direction.nY == 0) {
 			return;
 		}
 
+		if (contains(allReadyMoved, (GameObject*)this)) {
+			return;
+		}
+
+		allReadyMoved.push_back((GameObject*)this);
+
 		auto entitiesInTheWay = FindEntitiesInTheWay(direction);
 		for (auto& entity : entitiesInTheWay)
 		{
-			entity->Move(direction);
+			entity->Move(direction, allReadyMoved);
 		}
 
 		for (auto& point : _positions)
@@ -99,7 +124,33 @@ public:
 			point.Y = newPoint.Y;
 		}
 	}
-	int CalculateBlocksCarryedBy(std::vector<char>& CarriedBlocksNames) const override {
+	MoveResult CanMoveBy(Direction direction) const override {
+		if (direction.nX == 0 && direction.nY == 0) {
+			MoveResult success = { .CanBeMoved = true };
+			return success;
+		}
+
+		if (HitWallByMoving(direction)) {
+			MoveResult failed = { .CanBeMoved = false, .FailReason = MoveFailReason::HitWall };
+			return failed;
+		}
+		MoveResult result = { .CanBeMoved = true, .MoveCapacityCost = 0 };
+		std::vector<GameObject*> needToBeMoved;
+		needToBeMoved.push_back((GameObject*)this);
+		auto entitiesInTheWay = FindEntitiesInTheWay(direction);
+		for (const auto entity : entitiesInTheWay)
+		{
+			auto res = entity->CanBeMoved(direction, needToBeMoved);
+			if (!res.CanBeMoved) {
+				return res;
+			}
+
+			result.MoveCapacityCost += res.MoveCapacityCost;
+		}
+
+		return result;
+	}
+	int CalculateBlocksCarryedByEntity(std::vector<char>& CarriedBlocksNames) const override {
 		if (contains(CarriedBlocksNames, Name())) {
 			return 0;
 		}
@@ -114,9 +165,8 @@ public:
 			if (!HitObjectByMoving(Direction::Up, *entity)) {
 				continue;
 			}
-
-			auto infinity = INT_MAX;
-			auto result = entity->CanBeMoved(Direction::Down, infinity);
+			std::vector<GameObject*> toBeMoved;
+			auto result = entity->CanBeMoved(Direction::Down, toBeMoved);
 			if (result.FailReason == MoveFailReason::HitWall) {
 				continue;
 			}
@@ -125,7 +175,7 @@ public:
 				continue;
 			}
 
-			ret += entity->CalculateBlocksCarryedBy(CarriedBlocksNames);
+			ret += entity->CalculateBlocksCarryedByEntity(CarriedBlocksNames);
 		}
 
 		return ret;
@@ -161,19 +211,6 @@ private:
 		}
 		return false;
 	}
-	std::vector<GameObject*> FindEntitiesInTheWay(Direction direction) const {
-		std::vector<GameObject*> entitiesInTheWay;
-		for (auto entity : _screen->Entities()) {
-			if (entity->IsEqual(*this)) {
-				continue;
-			}
-
-			if (HitObjectByMoving(direction, *entity)) {
-				entitiesInTheWay.push_back(entity);
-			}
-		}
-		return entitiesInTheWay;
-	}
 	bool HitObjectByMoving(Direction direction, const GameObject& entity) const {
 		for (auto point : _positions)
 		{
@@ -186,33 +223,13 @@ private:
 		}
 		return false;
 	}
-	MoveResult CanMoveEntitiesByMoving(Direction direction, int& carryCapacity) const {
-		auto entitiesInTheWay = FindEntitiesInTheWay(direction);
-		for (const auto entity : entitiesInTheWay)
+	void FallDownBy(int fallRate) {
+		for (auto& point : _positions)
 		{
-			auto result = entity->CanBeMoved(direction, carryCapacity);
-			if (!result.CanBeMoved) {
-				return result;
-			}
-
-			carryCapacity -= entity->GetPositions().size();
+			point.Y -= fallRate;
+			auto newPoint = _screen->ClipToScreen(point);
+			point.X = newPoint.X;
+			point.Y = newPoint.Y;
 		}
-		MoveResult res = { .CanBeMoved = true };
-		return res;
-	}
-	MoveResult InnerCanBeMoved(Direction direction, int& carryCapacity) const {
-		MoveResult res = { 0 };
-		if (direction.nX == 0 && direction.nY == 0) {
-			res.CanBeMoved = true;
-			return res;
-		}
-
-		if (HitWallByMoving(direction)) {
-			res.CanBeMoved = false;
-			res.FailReason = MoveFailReason::HitWall;
-			return res;
-		}
-
-		return CanMoveEntitiesByMoving(direction, carryCapacity);
 	}
 };
