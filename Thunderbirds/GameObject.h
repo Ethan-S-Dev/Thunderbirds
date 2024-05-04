@@ -38,6 +38,9 @@ public:
 	}
 	virtual void Move(Direction direction) {
 	}
+	virtual std::vector<GameObject*> CollidedEntities(Direction direction) const {
+		return {};
+	}
 public:
 	bool Collides(const Point& point) const {
 		const auto& positions = GetPositions();

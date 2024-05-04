@@ -23,12 +23,6 @@ public:
 		_positions.push_back(point);
 		return true;
 	}
-	void Draw(IPainter& painter) const {
-		for (const auto& point : _positions)
-		{
-			painter.Draw(point, Name());
-		}
-	}
 	const Point& GetLowestPoint() const {
 
 		auto lowestIndex = 0;
@@ -49,12 +43,15 @@ public:
 	}
 	
 public:
+	std::vector<GameObject*> CollidedEntities(Direction direction) const override {
+		return FindEntitiesInTheWay(direction);
+	}
 	void PhysicsUpdate(float elapsedTime, const IController& controller) override {
 		_tickCounter += elapsedTime;
 		if (_tickCounter < 1)
 			return;
 		_tickCounter -= 1;
-		auto noCapacity = 0;
+		int noCapacity = _positions.size();
 		if (CanBeMoved(Direction::Down, noCapacity).CanBeMoved) {
 			Move(Direction::Down);
 		}
