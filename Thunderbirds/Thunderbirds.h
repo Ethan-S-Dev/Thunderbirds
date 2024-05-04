@@ -50,7 +50,7 @@ private:
 	PhysicsController _physicsController;
 public:
 	Thunderbirds() :
-		_screen("Screens/level_5.screen"), 
+		_screen("Levels/level_4.screen"), 
 		_buttonMapping{
 		VKCode::WKey,
 		VKCode::XKey,
