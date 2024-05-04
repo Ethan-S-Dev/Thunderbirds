@@ -18,6 +18,8 @@
     <ClInclude Include="Core\IController.h" />
     <ClInclude Include="Core\Direction.h" />
     <ClInclude Include="Core\Buttons.h" />
+    <ClInclude Include="Rendering\Camera.h" />
+    <ClInclude Include="Rendering\Rect.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Levels\level_2.screen" />

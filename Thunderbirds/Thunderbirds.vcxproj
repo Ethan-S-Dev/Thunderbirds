@@ -132,6 +132,8 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Core\Buttons.h" />
+    <ClInclude Include="Rendering\Camera.h" />
+    <ClInclude Include="Rendering\Rect.h" />
     <ClInclude Include="Screens\Block.h" />
     <ClInclude Include="ConsoleGameEngine.h" />
     <ClInclude Include="Core\Direction.h" />
