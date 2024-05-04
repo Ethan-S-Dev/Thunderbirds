@@ -20,6 +20,10 @@
     <ClInclude Include="Core\Buttons.h" />
     <ClInclude Include="Rendering\Camera.h" />
     <ClInclude Include="Rendering\Rect.h" />
+    <ClInclude Include="UI\Menu.h" />
+    <ClInclude Include="UI\UIElement.h" />
+    <ClInclude Include="Rendering\IRenderer.h" />
+    <ClInclude Include="Rendering\Colors.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Levels\level_2.screen" />

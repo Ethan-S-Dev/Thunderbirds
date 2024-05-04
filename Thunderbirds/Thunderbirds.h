@@ -2,16 +2,20 @@
 #include <format>
 #include <chrono>
 
+#include "Extensions.h"
 #include "ConsoleGameEngine.h"
 #include "Core/IPainter.h"
 #include "Core/IController.h"
 #include "Screens/Screen.h"
+#include "Rendering/Colors.h"
+#include "Rendering/IRenderer.h"
 #include "Rendering/Camera.h"
+#include "UI/Menu.h"
 
 constexpr auto CAMERA_TOP_MARGIN = 1;
 constexpr auto CAMERA_FRAME_COLOR = BG_DARK_BLUE;
 
-class Thunderbirds : public ConsoleGameEngine, public IPainter {
+class Thunderbirds : public ConsoleGameEngine, public IPainter, public IRenderer {
 private:
 	class ProcessController : public IController {
 	private:
@@ -43,9 +47,9 @@ private:
 	VKCode _buttonMapping[(short)Button::NumOfButtons];
 	VKCode _physicsButtonMapping[(short)Button::NumOfButtons];
 	bool _isPaused;
-	bool _showInfo;
 	int _lifePointsLeft;
 	Camera _camera;
+	Menu _menu;
 	ProcessController _processController;
 	PhysicsController _physicsController;
 public:
@@ -59,6 +63,7 @@ public:
 		VKCode::BKey,
 		VKCode::SKey,
 		VKCode::OneKey,
+		VKCode::TwoKey,
 		VKCode::EightKey,
 		VKCode::NineKey,
 		VKCode::EscKey,
@@ -71,14 +76,19 @@ public:
 		VKCode::BKey,
 		VKCode::SKey,
 		VKCode::OneKey,
+		VKCode::TwoKey,
 		VKCode::EightKey,
 		VKCode::NineKey,
 		VKCode::EscKey,
 		},
 		_isPaused(false),
-		_showInfo(false),
 		_lifePointsLeft(0),
 		_camera(),
+		_menu(
+			{0,_screenSize.Y, _screenSize.X, 0},
+			std::bind(&Thunderbirds::OnPausedPressed, this,std::placeholders::_1),
+			std::bind(&Thunderbirds::OnNewGamePressed, this),
+			std::bind(&Thunderbirds::OnExitPressed, this)),
 		_processController(this),
 		_physicsController(this)
 	{
@@ -126,13 +136,6 @@ private:
 		}
 	}
 	void ConsoleGameEngine::OnUpdate(float elapsedTime) {
-		if (GetProcessButtonState(Button::Pause).Pressed) {
-			_isPaused = !_isPaused;
-			if (!_isPaused) {
-				_showInfo = false;
-			}
-		}
-
 		if (_screen.State() == ScreenState::Playing && !_isPaused) {
 			_screen.Update(elapsedTime, _processController);
 		}
@@ -158,34 +161,28 @@ private:
 
 		if (_isPaused) {
 			_screen.GroundShips();
-			ShowMenu();
-			auto exit = GetProcessButtonState(Button::Exit).Pressed;
-			if (exit) {
-				Clear();
-				Stop();
-				return;
-			}
-			auto startNewGame = GetProcessButtonState(Button::NewGame).Pressed;
-			if (startNewGame) {
-				_lifePointsLeft = _screen.StartingLifePoints();
-				_screen.Reset();
-				_isPaused = false;
-				_showInfo = false;
-				return;
-			}
-
-			if (GetProcessButtonState(Button::Info).Pressed) {
-				_showInfo = !_showInfo;
-			}
-
-			if (_showInfo) {
-				ShowInfo();
-			}
 		}
+
+		_menu.Draw(elapsedTime, *this);
+		_menu.Update(elapsedTime, _processController);
 	}
 	void OnScreenResize() {
 		Point consoleScreenSize(_screenSize.X, _screenSize.Y);
 		_camera.SetCameraConsoleRectangle(consoleScreenSize, CAMERA_TOP_MARGIN);
+		_menu.SetFrame({ 0, consoleScreenSize.Y, consoleScreenSize.X, 0 });
+	}
+public:
+	void IRenderer::Clear() {
+		ConsoleGameEngine::Clear();
+	}
+	void IRenderer::Draw(int x, int y, char c = 0xDB, short col = 0x000F) {
+		ConsoleGameEngine::Draw(x, y, c, col);
+	}
+	void IRenderer::Fill(int x1, int y1, int x2, int y2, char c = 0xDB, short col = 0x000F) {
+		ConsoleGameEngine::Fill(x1, y1, x2, y2, c, col);
+	}
+	void IRenderer::DrawString(int x, int y, std::string s, short col = 0x000F) {
+		ConsoleGameEngine::DrawString(x, y, s, col);
 	}
 private:
 	void DrawGameInfo() {
@@ -223,10 +220,8 @@ private:
 			ConsoleGameEngine::Draw(frame.LeftDown.X, i, ' ', CAMERA_FRAME_COLOR);
 		}
 	}
-	void ShowMenu() {
-		std::string menu = "this is the menu";
-		DrawString((_screenSize.X / 2) - (menu.size() / 2), (_screenSize.Y / 2) - (_screenSize.Y / 4), menu, BG_BLUE);
-	}
+	short atr = 0x0000;
+	int count = 0;
 	void ShowWonMessage() {
 		std::string menu = "You won!";
 		DrawString((_screenSize.X / 2) - (menu.size() / 2), (_screenSize.Y / 2) - (_screenSize.Y / 4), menu, BG_GREY | FG_YELLOW);
@@ -235,12 +230,21 @@ private:
 		std::string menu = "You lost!";
 		DrawString((_screenSize.X / 2) - (menu.size() / 2), (_screenSize.Y / 2) - (_screenSize.Y / 4), menu, BG_DARK_RED | FG_WHITE);
 	}
-	void ShowInfo() {
-		std::string info = "This is info";
-		DrawString((_screenSize.X / 2) - (info.size() / 2), (_screenSize.Y / 2) - (_screenSize.Y / 4) + 1, info, BG_BLUE);
-	}
 	void SetCameraFocusePoint() {
 		auto focusePoint = _screen.ActiveShipMainPoint();
 		_camera.Focuse(focusePoint);
+	}
+private:
+	void OnPausedPressed(bool paused) {
+		_isPaused = paused;
+	}
+	void OnNewGamePressed() {
+		_lifePointsLeft = _screen.StartingLifePoints();
+		_screen.Reset();
+		_isPaused = false;
+	}
+	void OnExitPressed() {
+		Clear();
+		Stop();
 	}
 };

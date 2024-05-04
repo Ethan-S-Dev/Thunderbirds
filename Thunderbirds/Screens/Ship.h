@@ -142,8 +142,6 @@ public:
 			return;
 		}
 
-		LogDebug("delta: {}\n", elapsedTime);
-
 		_secCounter += elapsedTime;
 		if (_secCounter < SHIP_TICK) {
 			return;

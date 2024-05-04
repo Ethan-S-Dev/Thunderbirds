@@ -17,6 +17,7 @@ enum class Button : short {
 	SwitchToBigShip,
 	SwitchToSmallShip,
 	NewGame,
+	Levels,
 	Info,
 	Exit,
 	Pause,

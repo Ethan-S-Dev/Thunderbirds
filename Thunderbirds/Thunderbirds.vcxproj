@@ -133,6 +133,8 @@
   <ItemGroup>
     <ClInclude Include="Core\Buttons.h" />
     <ClInclude Include="Rendering\Camera.h" />
+    <ClInclude Include="Rendering\Colors.h" />
+    <ClInclude Include="Rendering\IRenderer.h" />
     <ClInclude Include="Rendering\Rect.h" />
     <ClInclude Include="Screens\Block.h" />
     <ClInclude Include="ConsoleGameEngine.h" />
@@ -147,6 +149,8 @@
     <ClInclude Include="Screens\Ship.h" />
     <ClInclude Include="Thunderbirds.h" />
     <ClInclude Include="Extensions.h" />
+    <ClInclude Include="UI\Menu.h" />
+    <ClInclude Include="UI\UIElement.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Levels\level_1.screen">
