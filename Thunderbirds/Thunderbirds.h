@@ -85,7 +85,6 @@ public:
 		_lifePointsLeft(0),
 		_camera(),
 		_menu(
-			{0,_screenSize.Y, _screenSize.X, 0},
 			std::bind(&Thunderbirds::OnPausedPressed, this,std::placeholders::_1),
 			std::bind(&Thunderbirds::OnNewGamePressed, this),
 			std::bind(&Thunderbirds::OnExitPressed, this)),
@@ -120,6 +119,11 @@ public:
 private:
 	void ConsoleGameEngine::OnCreate() {
 		if (!_screen.IsLoaded()) {
+			Stop();
+			return;
+		}
+
+		if (!_menu.Init()) {
 			Stop();
 			return;
 		}
@@ -163,13 +167,12 @@ private:
 			_screen.GroundShips();
 		}
 
-		_menu.Draw(elapsedTime, *this);
+		_menu.Draw(_screenSize.X, _screenSize.Y, *this);
 		_menu.Update(elapsedTime, _processController);
 	}
 	void OnScreenResize() {
 		Point consoleScreenSize(_screenSize.X, _screenSize.Y);
 		_camera.SetCameraConsoleRectangle(consoleScreenSize, CAMERA_TOP_MARGIN);
-		_menu.SetFrame({ 0, consoleScreenSize.Y, consoleScreenSize.X, 0 });
 	}
 public:
 	void IRenderer::Clear() {

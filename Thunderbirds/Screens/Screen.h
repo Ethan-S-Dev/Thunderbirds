@@ -264,6 +264,7 @@ private:
 				_screen[index] = EMPTY_TILE;
 			}
 		}
+		screenFile.close();
 	}
 	void CreateBlocksFromScreenChars() {
 		if (!IsLoaded()) {

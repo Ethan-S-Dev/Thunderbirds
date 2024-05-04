@@ -5,5 +5,5 @@
 class UIElement {
 public:
 	virtual void Update(float delta, const IController& controller) = 0;
-	virtual void Draw(float delta, IRenderer& renderer) const = 0;
+	virtual void Draw(int screenWidth,int screenHight, IRenderer& renderer) const = 0;
 };

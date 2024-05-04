@@ -271,10 +271,10 @@ protected:
 			for (int y = y1; y < y2; y++)
 				Draw(x, y, c, col);
 	}
-	void DrawString(int x, int y, std::string c, short col = 0x000F) {
-		for (size_t i = 0; i < c.size(); i++) {
+	void DrawString(int x, int y, const std::string& s, short col = 0x000F) {
+		for (size_t i = 0; i < s.size(); i++) {
 			if (x + i >= 0 && x + i < _screenSize.X && y >= 0 && y < _screenSize.Y) {
-				_screenBuffer[y * _screenSize.X + x + i].Char.AsciiChar = c[i];
+				_screenBuffer[y * _screenSize.X + x + i].Char.AsciiChar = s[i];
 				_screenBuffer[y * _screenSize.X + x + i].Attributes = col;
 			}
 		}

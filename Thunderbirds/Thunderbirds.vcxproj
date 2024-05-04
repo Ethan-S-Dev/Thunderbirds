@@ -170,6 +170,10 @@
       <FileType>Text</FileType>
     </None>
     <None Include="Levels\level_4.screen" />
+    <None Include="thunderbirds.info">
+      <DeploymentContent>true</DeploymentContent>
+      <FileType>Text</FileType>
+    </None>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

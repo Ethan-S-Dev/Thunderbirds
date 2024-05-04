@@ -31,5 +31,6 @@
     <None Include="Levels\level_1.screen" />
     <None Include="Levels\level_3.screen" />
     <None Include="Levels\level_4.screen" />
+    <None Include="thunderbirds.info" />
   </ItemGroup>
 </Project>
