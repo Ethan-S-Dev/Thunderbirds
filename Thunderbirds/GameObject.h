@@ -38,7 +38,7 @@ public:
 	}
 	virtual void Move(Direction direction) {
 	}
-	virtual std::vector<GameObject*> CollidedEntities(Direction direction) const {
+	virtual std::vector<GameObject*> FindEntitiesInTheWay(Direction direction) const {
 		return {};
 	}
 public:

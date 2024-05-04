@@ -188,6 +188,20 @@ public:
 			point.Y = newPoint.Y;
 		}
 	}
+	std::vector<GameObject*> FindEntitiesInTheWay(Direction direction) const override {
+		std::vector<GameObject*> entitiesInTheWay;
+		for (auto entity : _screen->Entities()) {
+			if (entity->IsEqual(*this)) {
+				continue;
+			}
+
+			if (HitObjectByMoving(direction, *entity)) {
+				entitiesInTheWay.push_back(entity);
+			}
+		}
+
+		return entitiesInTheWay;
+	}
 private:
 	bool PointCanBeAdded(const Point point) const {
 		switch (Name())
@@ -333,20 +347,7 @@ private:
 		}
 		return false;
 	}
-	std::vector<GameObject*> FindEntitiesInTheWay(Direction direction) const {
-		std::vector<GameObject*> entitiesInTheWay;
-		for (auto entity : _screen->Entities()) {
-			if (entity->IsEqual(*this)) {
-				continue;
-			}
-
-			if (HitObjectByMoving(direction, *entity)) {
-				entitiesInTheWay.push_back(entity);
-			}
-		}
-
-		return entitiesInTheWay;
-	}
+	
 	bool HitObjectByMoving(Direction direction,const GameObject& entity) const {
 		for (auto point : _positions)
 		{
@@ -361,11 +362,15 @@ private:
 	}
 	MoveResult CanMoveEntitiesByMoving(Direction direction, int carryCapacity) const {
 		auto entitiesInTheWay = FindEntitiesInTheWay(direction);
-		for (const auto& entity : entitiesInTheWay)
+		for (auto entity : entitiesInTheWay)
 		{
-			auto result = entity->CanBeMoved(direction, carryCapacity);
-			if (!result.CanBeMoved) {
-				return result;
+			auto entitiesInTheWayOfTheEntity = entity->FindEntitiesInTheWay(direction);
+			for (auto innerEntity : entitiesInTheWayOfTheEntity)
+			{
+				if (innerEntity->IsEqual(*this))
+				{
+					continue;
+				}
 			}
 		}
 		MoveResult ret = { .CanBeMoved = true };
