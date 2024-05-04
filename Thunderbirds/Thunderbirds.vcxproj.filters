@@ -1,0 +1,28 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClCompile Include="main.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Extensions.h" />
+    <ClInclude Include="Screen.h" />
+    <ClInclude Include="Block.h" />
+    <ClInclude Include="Point.h" />
+    <ClInclude Include="Ship.h" />
+    <ClInclude Include="Exit.h" />
+    <ClInclude Include="ConsoleGameEngine.h" />
+    <ClInclude Include="Thunderbirds.h" />
+    <ClInclude Include="IPainter.h" />
+    <ClInclude Include="GameObject.h" />
+    <ClInclude Include="IScreen.h" />
+    <ClInclude Include="IController.h" />
+    <ClInclude Include="Direction.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Screens\level2.screen" />
+    <None Include="Screens\level10.screen" />
+    <None Include="Screens\level1.screen" />
+    <None Include="Screens\level3.screen" />
+    <None Include="Screens\level4.screen" />
+  </ItemGroup>
+</Project>

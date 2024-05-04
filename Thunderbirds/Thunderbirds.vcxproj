@@ -104,6 +104,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
+      <LanguageStandard>stdcpplatest</LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -130,7 +131,38 @@
     <ClCompile Include="main.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="olcConsoleGameEngine.h" />
+    <ClInclude Include="Block.h" />
+    <ClInclude Include="ConsoleGameEngine.h" />
+    <ClInclude Include="Direction.h" />
+    <ClInclude Include="IController.h" />
+    <ClInclude Include="GameObject.h" />
+    <ClInclude Include="Exit.h" />
+    <ClInclude Include="IPainter.h" />
+    <ClInclude Include="IScreen.h" />
+    <ClInclude Include="Point.h" />
+    <ClInclude Include="Screen.h" />
+    <ClInclude Include="Ship.h" />
+    <ClInclude Include="Thunderbirds.h" />
+    <ClInclude Include="Extensions.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Screens\level1.screen">
+      <DeploymentContent>true</DeploymentContent>
+      <FileType>Text</FileType>
+    </None>
+    <None Include="Screens\level2.screen">
+      <DeploymentContent>true</DeploymentContent>
+      <FileType>Text</FileType>
+    </None>
+    <None Include="Screens\level10.screen">
+      <DeploymentContent>true</DeploymentContent>
+      <FileType>Text</FileType>
+    </None>
+    <None Include="Screens\level3.screen">
+      <DeploymentContent>true</DeploymentContent>
+      <FileType>Text</FileType>
+    </None>
+    <None Include="Screens\level4.screen" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
