@@ -149,7 +149,10 @@
     <ClInclude Include="Screens\Ship.h" />
     <ClInclude Include="Thunderbirds.h" />
     <ClInclude Include="Extensions.h" />
+    <ClInclude Include="UI\GameInfo.h" />
+    <ClInclude Include="UI\ScreenSelector.h" />
     <ClInclude Include="UI\Menu.h" />
+    <ClInclude Include="UI\UIStack.h" />
     <ClInclude Include="UI\UIElement.h" />
   </ItemGroup>
   <ItemGroup>

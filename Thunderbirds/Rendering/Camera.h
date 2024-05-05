@@ -4,7 +4,7 @@
 
 class Camera {
 private:
-	Point _cameraWorldFocusePoint;
+	Point _cameraWorldFocusePoint = {-1,-1};
 	Rect _cameraConsoleRect;
 	Point _cameraConsoleFucsePoint;
 public:
@@ -12,6 +12,11 @@ public:
 		return _cameraConsoleRect;
 	}
 	void Focuse(const Point freeMoveWorldFocusePoint) {
+		if (_cameraWorldFocusePoint.X == -1 || _cameraWorldFocusePoint.Y == -1) {
+			_cameraWorldFocusePoint = freeMoveWorldFocusePoint;
+			return;
+		}
+
 		auto focusePointXDif = freeMoveWorldFocusePoint.X - _cameraWorldFocusePoint.X;
 		auto focusePointYDif = freeMoveWorldFocusePoint.Y - _cameraWorldFocusePoint.Y;
 		auto maxXDif = ((_cameraConsoleRect.RightUp.X - _cameraConsoleRect.LeftDown.X) / 4) * 1;

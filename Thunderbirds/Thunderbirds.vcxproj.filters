@@ -24,6 +24,9 @@
     <ClInclude Include="UI\UIElement.h" />
     <ClInclude Include="Rendering\IRenderer.h" />
     <ClInclude Include="Rendering\Colors.h" />
+    <ClInclude Include="UI\GameInfo.h" />
+    <ClInclude Include="UI\ScreenSelector.h" />
+    <ClInclude Include="UI\UIStack.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Levels\level_2.screen" />

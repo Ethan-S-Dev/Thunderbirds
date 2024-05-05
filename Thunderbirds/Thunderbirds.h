@@ -11,6 +11,7 @@
 #include "Rendering/IRenderer.h"
 #include "Rendering/Camera.h"
 #include "UI/Menu.h"
+#include "UI/UIStack.h"
 
 constexpr auto CAMERA_TOP_MARGIN = 1;
 constexpr auto CAMERA_FRAME_COLOR = BG_DARK_BLUE;
@@ -43,18 +44,19 @@ private:
 	};
 
 private:
-	Screen _screen;
+	Screen* _selectedScreen;
 	VKCode _buttonMapping[(short)Button::NumOfButtons];
 	VKCode _physicsButtonMapping[(short)Button::NumOfButtons];
 	bool _isPaused;
 	int _lifePointsLeft;
 	Camera _camera;
+	UIStack _menuStack;
 	Menu _menu;
 	ProcessController _processController;
 	PhysicsController _physicsController;
 public:
 	Thunderbirds() :
-		_screen("Levels/level_4.screen"), 
+		_selectedScreen(nullptr),
 		_buttonMapping{
 		VKCode::WKey,
 		VKCode::XKey,
@@ -84,10 +86,12 @@ public:
 		_isPaused(false),
 		_lifePointsLeft(0),
 		_camera(),
+		_menuStack(),
 		_menu(
-			std::bind(&Thunderbirds::OnPausedPressed, this,std::placeholders::_1),
+			std::bind(&Thunderbirds::ScreenSelected, this, std::placeholders::_1),
 			std::bind(&Thunderbirds::OnNewGamePressed, this),
-			std::bind(&Thunderbirds::OnExitPressed, this)),
+			std::bind(&Thunderbirds::OnExitPressed, this),
+			_menuStack),
 		_processController(this),
 		_physicsController(this)
 	{
@@ -118,57 +122,43 @@ public:
 	}
 private:
 	void ConsoleGameEngine::OnCreate() {
-		if (!_screen.IsLoaded()) {
-			Stop();
-			return;
-		}
-
 		if (!_menu.Init()) {
 			Stop();
 			return;
 		}
 
-		_lifePointsLeft = _screen.StartingLifePoints();
 		Point consoleScreenSize(_screenSize.X, _screenSize.Y);
 		_camera.SetCameraConsoleRectangle(consoleScreenSize, CAMERA_TOP_MARGIN);
-		SetCameraFocusePoint();
+		_camera.Focuse({-1,-1});
 	}
 	void ConsoleGameEngine::OnPhysicsUpdate(float elapsedTime) {
-		if (_screen.State() == ScreenState::Playing && !_isPaused) {
-			_screen.PhysicsUpdate(elapsedTime, _physicsController);
-			SetCameraFocusePoint();
+		if (_isPaused) {
+			return;
 		}
+
+		if (_selectedScreen == nullptr) {
+			return;
+		}
+
+		if (_selectedScreen->State() != ScreenState::Playing) {
+			return;
+		}
+
+		_selectedScreen->PhysicsUpdate(elapsedTime, _physicsController);
+		UpdateCameraFocusePoint();
 	}
 	void ConsoleGameEngine::OnUpdate(float elapsedTime) {
-		if (_screen.State() == ScreenState::Playing && !_isPaused) {
-			_screen.Update(elapsedTime, _processController);
+		if (!_isPaused) {
+			UpdateScreenIfSelected(elapsedTime);
 		}
 
 		Clear();
 		DrawGameInfo();
 		DrawCameraFrame();
-		_screen.Draw(*this);
+		DrawScreenIfSelected();
+		CheckAndShowScreenEndIfSelected();
 
-		if (_screen.State() == ScreenState::Lost) {
-			_lifePointsLeft--;
-			if (_lifePointsLeft > 0) {
-				_screen.Reset();
-			}
-			else {
-				ShowLostMessage();
-			}
-		}
-
-		if (_screen.State() == ScreenState::Won) {
-			ShowWonMessage();
-		}
-
-		if (_isPaused) {
-			_screen.GroundShips();
-		}
-
-		_menu.Draw(_screenSize.X, _screenSize.Y, *this);
-		_menu.Update(elapsedTime, _processController);
+		HandleMenu(elapsedTime);
 	}
 	void OnScreenResize() {
 		Point consoleScreenSize(_screenSize.X, _screenSize.Y);
@@ -189,20 +179,24 @@ public:
 	}
 private:
 	void DrawGameInfo() {
+		if (_selectedScreen == nullptr) {
+			return;
+		}
+
 		std::string lifes;
 		for (auto i = 0; i < _lifePointsLeft; i++)
 		{
 			lifes += "<3";
 		}
-		for (auto i = 0; i < _screen.StartingLifePoints() - _lifePointsLeft; i++)
+		for (auto i = 0; i < _selectedScreen->StartingLifePoints() - _lifePointsLeft; i++)
 		{
 			lifes += "  ";
 		}
-		auto total_seconds_left = _screen.SecondsLeftToFinishScreen();
+		auto total_seconds_left = _selectedScreen->SecondsLeftToFinishScreen();
 		auto minutes = total_seconds_left / 60;
 		auto seconds = total_seconds_left % 60;
 
-		std::string infoBar = std::format("| Ship: {}, Time: {:02}:{:02}, Life: ", _screen.ActiveShipName(), minutes, seconds, lifes);
+		std::string infoBar = std::format("| Ship: {}, Time: {:02}:{:02}, Life: ", _selectedScreen->ActiveShipName(), minutes, seconds, lifes);
 		std::string end = " |";
 		auto sumLengths = infoBar.size() + lifes.size() + end.size();
 		DrawString((_screenSize.X / 2) - (sumLengths / 2), 0, infoBar);
@@ -210,6 +204,9 @@ private:
 		DrawString((_screenSize.X / 2) - (sumLengths / 2) + infoBar.size() + lifes.size(), 0, end);
 	}
 	void DrawCameraFrame() {
+		if (_selectedScreen == nullptr) {
+			return;
+		}
 		auto frame = _camera.CameraConsoleRect();
 		for (auto i = frame.LeftDown.X; i < frame.RightUp.X; i++)
 		{
@@ -217,14 +214,12 @@ private:
 			ConsoleGameEngine::Draw(i, frame.LeftDown.Y - 1, ' ', CAMERA_FRAME_COLOR);
 		}
 
-		for (auto i = frame.RightUp.Y ; i < frame.LeftDown.Y; i++)
+		for (auto i = frame.RightUp.Y; i < frame.LeftDown.Y; i++)
 		{
 			ConsoleGameEngine::Draw(frame.RightUp.X - 1, i, ' ', CAMERA_FRAME_COLOR);
 			ConsoleGameEngine::Draw(frame.LeftDown.X, i, ' ', CAMERA_FRAME_COLOR);
 		}
 	}
-	short atr = 0x0000;
-	int count = 0;
 	void ShowWonMessage() {
 		std::string menu = "You won!";
 		DrawString((_screenSize.X / 2) - (menu.size() / 2), (_screenSize.Y / 2) - (_screenSize.Y / 4), menu, BG_GREY | FG_YELLOW);
@@ -233,21 +228,103 @@ private:
 		std::string menu = "You lost!";
 		DrawString((_screenSize.X / 2) - (menu.size() / 2), (_screenSize.Y / 2) - (_screenSize.Y / 4), menu, BG_DARK_RED | FG_WHITE);
 	}
-	void SetCameraFocusePoint() {
-		auto focusePoint = _screen.ActiveShipMainPoint();
+	void UpdateCameraFocusePoint() {
+		auto focusePoint = _selectedScreen->ActiveShipMainPoint();
 		_camera.Focuse(focusePoint);
 	}
-private:
-	void OnPausedPressed(bool paused) {
-		_isPaused = paused;
+	void UpdateScreenIfSelected(float delta) {
+		if (_selectedScreen == nullptr) {
+			return;
+		}
+
+
+
+		if (_selectedScreen->State() != ScreenState::Playing) {
+			return;
+		}
+
+		_selectedScreen->Update(delta, _processController);
 	}
+	void DrawScreenIfSelected() {
+		if (_selectedScreen == nullptr){
+			return;
+		}
+
+		_selectedScreen->Draw(*this);
+	}
+	void CheckAndShowScreenEndIfSelected() {
+		if (_selectedScreen == nullptr) {
+			return;
+		}
+
+		if (_selectedScreen->State() == ScreenState::Lost) {
+			_lifePointsLeft--;
+			if (_lifePointsLeft > 0) {
+				_selectedScreen->Reset();
+			}
+			else {
+				ShowLostMessage();
+			}
+		}
+
+		if (_selectedScreen->State() == ScreenState::Won) {
+			ShowWonMessage();
+		}
+	}
+	void GroundScreenShipsIfSelected() {
+		if (_selectedScreen == nullptr) {
+			return;
+		}
+
+		_selectedScreen->GroundShips();
+	}
+	void HandleMenu(float delta) {
+		if (_selectedScreen == nullptr) {
+			if (_menuStack.Empty()) {
+				_isPaused = true;
+				_menuStack.Push(_menu);
+			}
+		}else if (_processController.GetButtonState(Button::Pause).Pressed) {
+			if (_menuStack.Empty()) {
+				GroundScreenShipsIfSelected();
+				_isPaused = true;
+				_menuStack.Push(_menu);
+			}
+			else {
+				_menuStack.Pop();
+			}
+
+			if (_menuStack.Empty()) {
+				_isPaused = false;
+			}
+		}
+
+		_menuStack.Draw(_screenSize.X, _screenSize.Y, *this);
+		_menuStack.Update(delta, _processController);
+	}
+private:
 	void OnNewGamePressed() {
-		_lifePointsLeft = _screen.StartingLifePoints();
-		_screen.Reset();
+		if (_selectedScreen == nullptr) {
+			return;
+		}
+
+		_lifePointsLeft = _selectedScreen->StartingLifePoints();
+		_selectedScreen->Reset();
 		_isPaused = false;
+		_menuStack.Pop();
 	}
 	void OnExitPressed() {
 		Clear();
 		Stop();
+	}
+	void ScreenSelected(Screen& screen) {
+		while (!_menuStack.Empty()) {
+			_menuStack.Pop();
+		}
+		_isPaused = false;
+		_selectedScreen = &screen;
+		_selectedScreen->Reset();
+		_lifePointsLeft = _selectedScreen->StartingLifePoints();
+		UpdateCameraFocusePoint();
 	}
 };

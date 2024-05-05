@@ -2,6 +2,7 @@
 #include <string>
 #include <memory>
 #include <fstream>
+#include <sstream>
 #include <algorithm>
 
 #include "IScreen.h"
@@ -37,6 +38,7 @@ private:
 	float _timePlayed;
 	ScreenState _state;
 	Point _focusePoint;
+	std::string _name;
 public:
 	Screen(const std::string screenFileName) :
 		_screen(nullptr), 
@@ -51,7 +53,8 @@ public:
 		_activeShipName(BIG_SHIP_NAME),
 		_timePlayed(0),
 		_state(ScreenState::Playing),
-		_focusePoint(0,0)
+		_focusePoint(0,0),
+		_name()
 	{
 		LoadScreenCharsFromFile(screenFileName);
 		CreateBlocksFromScreenChars();
@@ -68,6 +71,9 @@ public:
 		}
 	}
 public:
+	const std::string& Name() const {
+		return _name;
+	}
 	bool IsLoaded() const {
 		return  _screen != nullptr;
 	}
@@ -230,21 +236,22 @@ private:
 			return;
 		}
 
-		std::string line;
-		getline(screenFile, line);
-		if (sscanf_s(line.c_str(), "%dx%dT%dL%d", &_screenWidth, &_screenHight, &_timeLimit, &_lifePoints) != 4) {
+		char x, T, L, N;
+		screenFile >> _screenWidth >> x >> _screenHight >> T >> _timeLimit >> L >> _lifePoints >> N;
+		std::getline(screenFile, _name);
+		/*if (sscanf_s(line.c_str(), "%dx%dT%dL%dN%s", &_screenWidth, &_screenHight, &_timeLimit, &_lifePoints) != 4) {
 			return;
-		}
+		}*/
 
-		if (_screenWidth < MIN_SCREEN_WIDTH || _screenHight < MIN_SCREEN_HIGHT || _timeLimit < MIN_PLAY_TIME || _timeLimit > MAX_PLAY_TIME) {
+		if (_screenWidth < MIN_SCREEN_WIDTH || _screenHight < MIN_SCREEN_HIGHT || _timeLimit < MIN_PLAY_TIME || _timeLimit > MAX_PLAY_TIME || _name.empty()) {
 			return;
 		}
 
 		_screen = std::make_unique<char[]>(_screenWidth * _screenHight);
-
+		std::string line;
 		for (auto lineNum = 0; lineNum < _screenHight; lineNum++)
 		{
-			if (!getline(screenFile, line)) {
+			if (!std::getline(screenFile, line)) {
 				for (auto col = 0; col < _screenWidth; col++)
 				{
 					auto index = (lineNum * _screenWidth) + col;
