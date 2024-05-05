@@ -1,3 +1,8 @@
-[Main Theme](https://www.beepbox.co/#9n31s0kbl00e06t1ga7g0fj07r3i0o432T0v3u10f0qg01d04w2h0E0T1v3u16f0q00d03A0F0B0Q0000Pff00E1617T0v2u13f10o5q00d03w5h1E0T2v4u15f10w4qw02d03w0E0bcPcPc000000h4h4g0000014wch0000004h4h4000000p22DkQu6feUIGaCnEzwienI8Wrif8OxqhqEzH5GI5G15jbH2Q4t17ghQ4t17gbgkQ4t17ga0FBQA6CzWG5PYGKOH0EeInaOXIHb5PhsPoGOCqfH1tWImGQX-u8R2Rl2FE_hsI5chUaw9cE0bgsHgbgbAxk1k1k1k1k1p0Kg5g40)
-[2](https://www.beepbox.co/#9n31s0kbl00e06t1ga7g0fj07r1i0o432T0v3u10f0qg01d04w2h0E0T1v3u16f0q00d03A0F0B0Q0000Pff00E1617T0v2u13f10o5q00d03w5h1E0T2v1u15f10w4qw02d03w0E0bcPcPc000000h4h4g0000014wch0000004h4h4000000p223kQu6feUIGaCnEzwienI8Wrif8OxqhqEzH5GI5G15jbH2Q4t17ghQ4t17gbgkQ4t17ga0FBQA6CzWG5PYGKOH0EeInaOXIHb5PhsPoGOCqfH1tWImGQX-u8R2Rl2FE_hsI00)
-[Death](https://tinyurl.com/3yalxpa4)
+[Main Theme](https://tinyurl.com/34h3b2ao)<br>
+[Main Theme v2](https://tinyurl.com/2ub87m2o)<br>
+[Death](https://tinyurl.com/3yalxpa4)<br>
+[Move](https://tinyurl.com/34q2cohz)<br>
+[Move 2](https://tinyurl.com/3xgxe2at)<br>
+[Exit](https://tinyurl.com/32u8k263)<br>
+[Win](https://tinyurl.com/3y2mxko2)<br>
+[Lose](https://tinyurl.com/32tedrku)
