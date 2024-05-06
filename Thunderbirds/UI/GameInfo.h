@@ -29,11 +29,9 @@ public:
 		}
 
 		std::string line;
-		while (getline(infoFile, line)) {
+		while (std::getline(infoFile, line)) {
 			_gameInfoText.push_back(line);
 		}
-
-		infoFile.close();
 
 		_numberOfVisableLines = _gameInfoText.size();
 

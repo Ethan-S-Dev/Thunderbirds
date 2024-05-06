@@ -239,10 +239,6 @@ private:
 		char x, T, L, N;
 		screenFile >> _screenWidth >> x >> _screenHight >> T >> _timeLimit >> L >> _lifePoints >> N;
 		std::getline(screenFile, _name);
-		/*if (sscanf_s(line.c_str(), "%dx%dT%dL%dN%s", &_screenWidth, &_screenHight, &_timeLimit, &_lifePoints) != 4) {
-			return;
-		}*/
-
 		if (_screenWidth < MIN_SCREEN_WIDTH || _screenHight < MIN_SCREEN_HIGHT || _timeLimit < MIN_PLAY_TIME || _timeLimit > MAX_PLAY_TIME || _name.empty()) {
 			return;
 		}
@@ -271,7 +267,6 @@ private:
 				_screen[index] = EMPTY_TILE;
 			}
 		}
-		screenFile.close();
 	}
 	void CreateBlocksFromScreenChars() {
 		if (!IsLoaded()) {
