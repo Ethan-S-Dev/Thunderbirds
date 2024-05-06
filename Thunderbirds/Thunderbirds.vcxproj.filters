@@ -34,6 +34,6 @@
     <None Include="Assets\Screens\level_1.screen" />
     <None Include="Assets\Screens\level_3.screen" />
     <None Include="Assets\Screens\level_4.screen" />
-    <None Include="thunderbirds.info" />
+    <None Include="Assets\GameInfo\thunderbirds.info" />
   </ItemGroup>
 </Project>

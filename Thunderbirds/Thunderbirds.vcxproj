@@ -173,7 +173,7 @@
       <FileType>Text</FileType>
     </None>
     <None Include="Assets\Screens\level_4.screen" />
-    <None Include="thunderbirds.info">
+    <None Include="Assets\GameInfo\thunderbirds.info">
       <DeploymentContent>true</DeploymentContent>
       <FileType>Text</FileType>
     </None>

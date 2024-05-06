@@ -13,9 +13,13 @@ class GameInfo : public UIElement {
 	const std::string _fileName;
 	std::vector<std::string> _gameInfoText;
 	int _startLineIndex;
+	int _numberOfVisableLines;
+	std::string _back;
+	int _maxLength;
 public:
 	GameInfo(const std::string fileName, UIStack& menuStack) :
-		_menuStack(menuStack), _fileName(fileName), _gameInfoText(), _startLineIndex(0)
+		_menuStack(menuStack), _fileName(fileName), _gameInfoText(), _startLineIndex(0), _numberOfVisableLines(0),
+		_back("(ESC) <- Back | (x) v Scroll Down | (w) ^ Scroll Up"), _maxLength(_back.size())
 	{}
 
 	bool Load() {
@@ -30,34 +34,61 @@ public:
 		}
 
 		infoFile.close();
-		return true;
-	}
-	void Update(float delta, const IController& controller) {
 
-	}
-	void Draw(int screenWidth, int screenHight, IRenderer& renderer) const {
-		std::string back = "(ESC) <- Back | (x) v Scroll Down | (w) ^ Scroll Up";
-		auto maxLength = back.size();
+		_numberOfVisableLines = _gameInfoText.size();
+
+		_maxLength = _back.size();
 		for (auto& line : _gameInfoText)
 		{
-			if (line.size() > maxLength) {
-				maxLength = line.size();
+			if (line.size() > _maxLength) {
+				_maxLength = line.size();
 			}
 		}
 
-		auto infoStartX = (screenWidth / 2) - (maxLength / 2);
+		return true;
+	}
+	void Update(float delta, const IController& controller) {
+		if (_startLineIndex < _gameInfoText.size() - 1) {
+			if (controller.GetButtonState(Button::Down).Pressed) {
+				_startLineIndex++;
+			}
+		}
+
+		if (_startLineIndex > 0) {
+			if (controller.GetButtonState(Button::Up).Pressed) {
+				_startLineIndex--;
+			}
+		}
+	}
+	void Draw(int screenWidth, int screenHight, IRenderer& renderer) const {
+		auto infoStartX = (screenWidth / 2) - (_maxLength / 2);
 		auto infoStartY = (screenHight / 2) - (screenHight / 4);
 		auto infoEndY = (screenHight / 4) * 3;
 
-		renderer.Fill(infoStartX - INFO_PADING, infoStartY - INFO_PADING, infoStartX + maxLength + INFO_PADING, infoEndY, '\0', BG_BLUE);
+		renderer.Fill(infoStartX - INFO_PADING, infoStartY - INFO_PADING, infoStartX + _maxLength + INFO_PADING, infoEndY, '\0', BG_BLUE);
 		auto lineNum = 0;
 		auto numberOfVisableLines = min((infoEndY - INFO_PADING) - infoStartY, _gameInfoText.size());
-		for (auto i = _startLineIndex; i < numberOfVisableLines || i < numberOfVisableLines; i++)
-		{
-			renderer.DrawString(infoStartX, infoStartY + i, _gameInfoText[i], FG_BLACK | BG_BLUE);
+
+		if (numberOfVisableLines >= _gameInfoText.size()) {
+			ConstHackedSetStartLineIndex(0);
 		}
-		renderer.DrawString(infoStartX, infoEndY - INFO_PADING, back, FG_BLACK | BG_BLUE);
+
+		auto maxIndex = min(numberOfVisableLines + _startLineIndex, _gameInfoText.size());
+
+		if (_gameInfoText.size() - _startLineIndex < numberOfVisableLines) {
+			ConstHackedSetStartLineIndex(_gameInfoText.size() - numberOfVisableLines);
+		}
+
+		for (auto i = _startLineIndex; i < maxIndex; i++)
+		{
+			renderer.DrawString(infoStartX, infoStartY + (lineNum++), _gameInfoText[i], FG_BLACK | BG_BLUE);
+		}
+		renderer.DrawString(infoStartX, infoEndY - 1, _back, FG_BLACK | BG_BLUE);
 	}
 
-
+private:
+	void ConstHackedSetStartLineIndex(int index) const {
+		int* hackedIndex = (int*)&_startLineIndex;
+		(*hackedIndex) = index;
+	}
 };

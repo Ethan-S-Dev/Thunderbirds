@@ -30,7 +30,7 @@ public:
 	) :
 		_onNewGamePressed(onNewGamePressed), 
 		_onExitPressed(onExitPressed),
-		_info("thunderbirds.info", menuStack), 
+		_info("Assets/GameInfo/thunderbirds.info", menuStack), 
 		_screenSelector(menuStack, screenSelected),
 		_menuStack(menuStack),
 		_screenSelected(false)

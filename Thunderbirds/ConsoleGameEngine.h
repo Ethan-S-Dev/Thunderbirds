@@ -4,8 +4,6 @@
 #include <string>
 #include <chrono>
 
-#include "Extensions.h"
-
 enum VKCode {
 	LeftMouseButton = 0x01,
 	RightMouseButton = 0x02,
@@ -229,11 +227,8 @@ public:
 
 				HandleScreenResizing();
 				HandleProcessInput(); 
-				
-				LogDebug("\nReal Delta: {} -- ", fElapsedTime);
 
 				if (_physicsDelta >= (1.f / PHYSICS_TICKS_PER_SEC)) {
-					LogDebug("Physics Delta: {}", _physicsDelta);
 					HandlePhysicsInput();
 					OnPhysicsUpdate(_physicsDelta);
 					_physicsDelta = 0;

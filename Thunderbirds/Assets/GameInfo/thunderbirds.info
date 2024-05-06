@@ -1,0 +1,31 @@
+Captain!! Captain!! You must hurray up!
+You must get the ships to a safe location!
+
+Assignment:
+- Get the Small and Large ships to the Exits.
+  (Exits are represented as numbers blocks)
+- Make sure you get to the Exits with the two
+  Ships in time!!
+  (Time is shown at the top of the screen)
+- Becarfull! Your Ships can only move and 
+  carry blocks fitted to their size.
+  (The big ship can carry and push up to 6 
+  blocks at a time, and the small ship only
+  2 at a time)
+- Make sure you don't block your other ship
+  when you move blocks arround!
+- You only have limited amount of lives,
+  Becarfull not to die to much!
+  (Your life points are shown at the top
+  of the screen)
+
+Good Luck!!
+
+Controlles:
+ESC - Pause/Unpause And Opens The Menu
+W - Change Ship Direction Up
+A - Change Ship Direction Left
+D - Change Ship Direction Right
+X - Change Ship Direction Down
+S - Switch To Small Ship
+B - Switch To Large Ship

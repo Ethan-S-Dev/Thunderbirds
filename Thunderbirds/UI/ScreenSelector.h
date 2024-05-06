@@ -2,6 +2,8 @@
 #include <functional>
 #include <filesystem>
 
+#include "../Extensions.h"
+
 #include "UIStack.h"
 #include "UIElement.h"
 #include "../Screens/Screen.h"
@@ -13,7 +15,11 @@ private:
 	std::function<void(Screen& screen)> _screenSelected;
 	UIStack& _menuStack;
 	int _screenIndex;
+	int _maxLength = 0;
 	std::vector<Screen> _screens;
+	std::vector<std::string> _screensLines;
+	std::string _title = "Select Screen:";
+	std::string _controles = "(ESC) <- Back | (W) ^ Up | (X) v Down | (S) - Select";
 public:
 	ScreenSelector(UIStack& menuStack, std::function<void(Screen& screen)> screenSelected) :_screenSelected(screenSelected), _menuStack(menuStack), _screenIndex(0)
 	{}
@@ -28,6 +34,16 @@ public:
 
 			if (!_screens.back().IsLoaded()) {
 				return false;
+			}
+		}
+
+		_maxLength = _controles.size();
+		for(auto i = 0; i < _screens.size(); i++)
+		{
+			auto screenLine = std::format("({}) - {}", (i + 1), _screens[i].Name());
+			_screensLines.push_back(screenLine);
+			if (screenLine.size() > _maxLength) {
+				_maxLength = screenLine.size();
 			}
 		}
 
@@ -55,21 +71,13 @@ public:
 		}
 	}
 	void Draw(int screenWidth, int screenHight, IRenderer& renderer) const {
-		std::string title = "Select Screen:";
-		std::string controles = "(ESC) <- Back | (W) ^ Up | (X) v Down | (S) - Select";
-		auto maxLength = controles.size();
-		for (auto& screen : _screens)
-		{
-			if (screen.Name().size() > maxLength) {
-				maxLength = screen.Name().size();
-			}
-		}
+		auto startX = (screenWidth / 2) - (_maxLength / 2);
+		auto startY = (screenHight / 4);
+		auto endY = startY * 3;
 
-		auto startX = (screenWidth / 2) - (maxLength / 2);
-		auto startY = (screenHight / 2) - (screenHight / 4);
+		renderer.Fill(startX - INFO_PADING, startY - INFO_PADING, startX + _maxLength + INFO_PADING, endY, '\0', FG_BLACK | BG_BLUE);
+		renderer.DrawString(startX, startY, _title, FG_BLACK | BG_BLUE);
 
-		renderer.Fill(startX - INFO_PADING, startY - INFO_PADING, startX + maxLength + INFO_PADING, startY + _screens.size() + 2 + INFO_PADING, '\0', FG_BLACK | BG_BLUE);
-		renderer.DrawString(startX, startY, title, FG_BLACK | BG_BLUE);
 		for (auto i = 0; i < _screens.size(); i++)
 		{
 			auto color = FG_BLACK | BG_BLUE;
@@ -77,9 +85,9 @@ public:
 				color = color | COMMON_LVB_REVERSE_VIDEO;
 			}
 
-			renderer.DrawString(startX, startY + i + 1, _screens[i].Name(), color);
+			renderer.DrawString(startX, startY + i + 1, _screensLines[i], color);
 		}
 
-		renderer.DrawString(startX, startY + _screens.size() + 1, controles, FG_BLACK | BG_BLUE);
+		renderer.DrawString(startX, endY - 1, _controles, FG_BLACK | BG_BLUE);
 	}
 };
