@@ -29,4 +29,7 @@ public:
 	bool Empty() const {
 		return _stack.empty();
 	}
+	int Size() const {
+		return _stack.size();
+	}
 };
