@@ -52,7 +52,7 @@ public:
 		{
 			renderer.DrawString(menuStartX, menuStartY + (lineNum++), line, FG_BLACK | BG_BLUE);
 		}
-		std::string back = "(ESC) <-";
+		std::string back = "(ESC) <- Back";
 		renderer.DrawString(menuStartX, menuStartY + (lineNum), back, FG_BLACK | BG_BLUE);
 	}
 };

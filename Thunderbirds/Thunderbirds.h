@@ -130,6 +130,7 @@ private:
 		Point consoleScreenSize(_screenSize.X, _screenSize.Y);
 		_camera.SetCameraConsoleRectangle(consoleScreenSize, CAMERA_TOP_MARGIN);
 		_camera.Focuse({-1,-1});
+		_menu.SetScreenSelected(false);
 	}
 	void ConsoleGameEngine::OnPhysicsUpdate(float elapsedTime) {
 		if (_isPaused) {
@@ -326,5 +327,6 @@ private:
 		_selectedScreen->Reset();
 		_lifePointsLeft = _selectedScreen->StartingLifePoints();
 		UpdateCameraFocusePoint();
+		_menu.SetScreenSelected(true);
 	}
 };

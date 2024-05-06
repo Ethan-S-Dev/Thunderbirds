@@ -9,6 +9,8 @@
 #include "GameInfo.h"
 #include "ScreenSelector.h"
 
+#define UPPER_LINE 0x0400
+
 class Menu : public UIElement {
 private:
 	std::function<void(bool paused)> _onPausePressed;
@@ -18,6 +20,7 @@ private:
 	GameInfo _info;
 	ScreenSelector _screenSelector;
 	UIStack& _menuStack;
+	bool _screenSelected;
 public:
 	Menu(
 		std::function<void(Screen& screen)> screenSelected,
@@ -29,7 +32,8 @@ public:
 		_onExitPressed(onExitPressed),
 		_info("thunderbirds.info", menuStack), 
 		_screenSelector(menuStack, screenSelected),
-		_menuStack(menuStack)
+		_menuStack(menuStack),
+		_screenSelected(false)
 	{}
 public:
 	bool Init() {
@@ -65,21 +69,27 @@ public:
 		}
 	}
 	void Draw(int screenWidth, int screenHight, IRenderer& renderer) const {
-		std::string menu = "  Thunderbirds!        ";
-		std::string newGame = "  (1) New Game         ";
-		std::string levels = "  (2) Screen Selection ";
-		std::string info = "  (8) Instractions     ";
-		std::string exit = "  (9) Exit             ";
+		std::string menu = "        Thunderbirds!        ";
+		std::string back = "  (ESC) Resume Game          ";
+		std::string newGame = "    (1) New Game             ";
+		std::string levels = "    (2) Screen Selection     ";
+		std::string info = "    (8) Instractions         ";
+		std::string exit = "    (9) Exit                 ";
 
 		auto menuStartX = (screenWidth / 2) - (menu.size() / 2);
 		auto menuStartY = (screenHight / 2) - (screenHight / 4);
 
-		renderer.DrawString(menuStartX, menuStartY, menu, FG_BLACK | BG_BLUE);
-		renderer.DrawString(menuStartX, menuStartY + 1, newGame, FG_BLACK | BG_BLUE | 0x0400);
-		renderer.DrawString(menuStartX, menuStartY + 2, levels, FG_BLACK | BG_BLUE);
-		renderer.DrawString(menuStartX, menuStartY + 3, info, FG_BLACK | BG_BLUE);
-		renderer.DrawString(menuStartX, menuStartY + 4, exit, FG_BLACK | BG_BLUE);
+		auto selectedGameColor = _screenSelected ? FG_BLACK : FG_DARK_GREY;
 
+		renderer.DrawString(menuStartX, menuStartY, menu, FG_DARK_RED | BG_BLUE);
+		renderer.DrawString(menuStartX, menuStartY + 1, back, selectedGameColor | BG_BLUE );
+		renderer.DrawString(menuStartX, menuStartY + 2, newGame, selectedGameColor | BG_BLUE );
+		renderer.DrawString(menuStartX, menuStartY + 3, levels, FG_BLACK | BG_BLUE);
+		renderer.DrawString(menuStartX, menuStartY + 4, info, FG_BLACK | BG_BLUE);
+		renderer.DrawString(menuStartX, menuStartY + 5, exit, FG_BLACK | BG_BLUE);
+	}
+	void SetScreenSelected(bool selected) {
+		_screenSelected = selected;
 	}
 private:
 	void OnNewGamePressed() {
