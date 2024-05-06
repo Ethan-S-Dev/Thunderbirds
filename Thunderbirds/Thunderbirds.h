@@ -129,7 +129,7 @@ private:
 
 		Point consoleScreenSize(_screenSize.X, _screenSize.Y);
 		_camera.SetCameraConsoleRectangle(consoleScreenSize, CAMERA_TOP_MARGIN);
-		_camera.Focuse({-1,-1});
+		_camera.Focuse({ -1,-1 });
 		_menu.SetScreenSelected(false);
 	}
 	void ConsoleGameEngine::OnPhysicsUpdate(float elapsedTime) {
@@ -247,7 +247,7 @@ private:
 		_selectedScreen->Update(delta, _processController);
 	}
 	void DrawScreenIfSelected() {
-		if (_selectedScreen == nullptr){
+		if (_selectedScreen == nullptr) {
 			return;
 		}
 
@@ -280,28 +280,32 @@ private:
 		_selectedScreen->GroundShips();
 	}
 	void HandleMenu(float delta) {
-		if (_selectedScreen == nullptr) {
-			if (_menuStack.Empty()) {
-				_isPaused = true;
-				_menuStack.Push(_menu);
-			}
-		}else if (_processController.GetButtonState(Button::Pause).Pressed) {
+		_menuStack.Draw(_screenSize.X, _screenSize.Y, *this);
+		_menuStack.Update(delta, _processController);
+
+		if (_menuStack.Empty() && _selectedScreen == nullptr) {
+			_isPaused = true;
+			_menuStack.Push(_menu);
+		}
+
+		if (_processController.GetButtonState(Button::Pause).Pressed) {
 			if (_menuStack.Empty()) {
 				GroundScreenShipsIfSelected();
 				_isPaused = true;
 				_menuStack.Push(_menu);
+				return;
 			}
-			else {
-				_menuStack.Pop();
+			auto onlyMainMenu = _menuStack.Size() == 1;
+			if (onlyMainMenu) {
+				return;
 			}
+			
+			_menuStack.Pop();
 
 			if (_menuStack.Empty()) {
 				_isPaused = false;
 			}
 		}
-
-		_menuStack.Draw(_screenSize.X, _screenSize.Y, *this);
-		_menuStack.Update(delta, _processController);
 	}
 private:
 	void OnNewGamePressed() {
