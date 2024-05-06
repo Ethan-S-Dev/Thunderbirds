@@ -443,6 +443,7 @@ private:
 			}
 
 			blockNames.push_back(entity->Name());
+			ret += entity->GetPositions().size();
 			ret += entity->CalculateBlocksCarryedByEntity(blockNames);
 		}
 		return ret;

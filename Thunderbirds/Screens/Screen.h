@@ -156,12 +156,12 @@ public:
 			exit.Update(elapsedTime, controller);
 		}
 
-		for (auto& ship : _ships) {
-			ship.Update(elapsedTime, controller);
-		}
-
 		for (auto& block : _blocks) {
 			block.Update(elapsedTime, controller);
+		}
+
+		for (auto& ship : _ships) {
+			ship.Update(elapsedTime, controller);
 		}
 	}
 	int Width() const {

@@ -40,8 +40,7 @@ public:
 		}
 
 		return _positions[lowestIndex];
-	}
-	
+	}	
 public:
 	std::vector<GameObject*> FindEntitiesInTheWay(Direction direction) const override {
 		std::vector<GameObject*> entitiesInTheWay;
