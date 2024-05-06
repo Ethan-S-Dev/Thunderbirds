@@ -6,7 +6,7 @@
 #include "UIElement.h"
 #include "../Screens/Screen.h"
 
-constexpr auto LEVELS_FOLDER = "Levels";
+constexpr auto LEVELS_FOLDER = "Assets/Screens";
 
 class ScreenSelector : public UIElement {
 private:
