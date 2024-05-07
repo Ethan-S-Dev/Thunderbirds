@@ -2,6 +2,8 @@
 #include <windows.h>
 #include <vector>
 #include <string>
+#include <algorithm>
+#include <format>
 
 template <typename T>
 bool contains(const std::vector<T>& vector, const T& value) {

@@ -14,6 +14,8 @@
     <ClCompile Include="UI\ScreenSelector.cpp" />
     <ClCompile Include="Engine\ConsoleGameEngine.cpp" />
     <ClCompile Include="Thunderbirds.cpp" />
+    <ClCompile Include="Screens\Exit.cpp" />
+    <ClCompile Include="Screens\Screen.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Extensions.h" />

@@ -12,7 +12,10 @@ class Exit : public GameObject {
 private:
 	const IScreen* _screen;
 public:
-	Exit(char name, const IScreen* screen) : GameObject(name), _screen(screen) {}
+	Exit(char name, const IScreen* screen) :
+		GameObject(name),
+		_screen(screen)
+	{}
 public:
 	bool AddPosition(const Point point) {
 		if (contains(_positions, point))
