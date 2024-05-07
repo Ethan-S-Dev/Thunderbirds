@@ -1,10 +1,10 @@
 #pragma once
 #include "../Extensions.h"
+#include "MoveResult.h"
 #include "../Core/Direction.h"
 #include "../Core/Point.h"
 #include "../Core/IController.h"
 #include "../Core/IPainter.h"
-#include "MoveResult.h"
 
 class GameObject {
 private:
@@ -12,9 +12,12 @@ private:
 protected:
 	std::vector<Point> _positions;
 public:
-	GameObject(char name) : _name(name), _positions() {}
+	GameObject(char name) :
+		_name(name),
+		_positions()
+	{}
 public:
-	virtual void Update(float elapsedTime, const IController & controller) {
+	virtual void Update(float elapsedTime, const IController& controller) {
 
 	}
 	virtual void PhysicsUpdate(float elapsedTime, const IController& controller) {
