@@ -281,7 +281,7 @@ void Thunderbirds::HandleMenu(float delta) {
 			return;
 		}
 		auto onlyMainMenu = _menuStack.Size() == 1;
-		if (onlyMainMenu) {
+		if (onlyMainMenu && _selectedScreen == nullptr) {
 			return;
 		}
 

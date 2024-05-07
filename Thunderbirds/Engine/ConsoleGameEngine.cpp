@@ -1,7 +1,48 @@
 #include <chrono>
 #include <memory>
+#include "../Extensions.h"
 
 #include "ConsoleGameEngine.h"
+
+// https://learn.microsoft.com/en-us/troubleshoot/windows-server/performance/obtain-console-window-handle
+// This was the only way that worked
+HWND GetConsoleHwnd(void)
+{
+#define MY_BUFSIZE 1024 // Buffer size for console window titles.
+	HWND hwndFound;         // This is what is returned to the caller.
+	char pszNewWindowTitle[MY_BUFSIZE]; // Contains fabricated
+	// WindowTitle.
+	char pszOldWindowTitle[MY_BUFSIZE]; // Contains original
+	// WindowTitle.
+
+	// Fetch current window title.
+
+	GetConsoleTitleA(pszOldWindowTitle, MY_BUFSIZE);
+
+	// Format a "unique" NewWindowTitle.
+
+	sprintf_s(pszNewWindowTitle, "%d/%d",
+		GetTickCount(),
+		GetCurrentProcessId());
+
+	// Change current window title.
+
+	SetConsoleTitleA(pszNewWindowTitle);
+
+	// Ensure window title has been updated.
+
+	Sleep(40);
+
+	// Look for NewWindowTitle.
+
+	hwndFound = FindWindowA(NULL, pszNewWindowTitle);
+
+	// Restore original window title.
+
+	SetConsoleTitleA(pszOldWindowTitle);
+
+	return(hwndFound);
+}
 
 bool ConsoleGameEngine::_active = true;
 
@@ -16,8 +57,9 @@ ConsoleGameEngine::ConsoleGameEngine() :
 	_physicsKeyNewState{ 0 },
 	_screenBuffer(),
 	_screanHandle(GetStdHandle(STD_OUTPUT_HANDLE)),
-	_windowRect{0},
-	_physicsDelta(0)
+	_windowRect{ 0 },
+	_physicsDelta(0),
+	_currentWindow(GetConsoleHwnd())
 {}
 
 void ConsoleGameEngine::Start() {
@@ -116,6 +158,10 @@ void ConsoleGameEngine::HandleScreenResizing() {
 }
 
 void ConsoleGameEngine::HandleProcessInput() {
+	if (!IsActiveWindow()) {
+		return;
+	}
+
 	for (int i = 0; i < 256; i++)
 	{
 		_processKeyNewState[i] = GetAsyncKeyState(i);
@@ -125,7 +171,7 @@ void ConsoleGameEngine::HandleProcessInput() {
 
 		if (_processKeyNewState[i] != _processKeyOldState[i])
 		{
-			if (_processKeyNewState[i] & 0x8000)
+			if (_processKeyNewState[i])
 			{
 				_processKeys[i].Pressed = !_processKeys[i].Held;
 				_processKeys[i].Held = true;
@@ -135,6 +181,8 @@ void ConsoleGameEngine::HandleProcessInput() {
 				_processKeys[i].Released = true;
 				_processKeys[i].Held = false;
 			}
+			std::string value = std::format("({}) - ({}) - ({})", _processKeys[i].Pressed ? "Pressed" : "", _processKeys[i].Held ? "Held" : "", _processKeys[i].Released ? "Released" : "");
+			LogDebug("VK: {} is {}\n", i, value);
 		}
 
 		_processKeyOldState[i] = _processKeyNewState[i];
@@ -173,3 +221,8 @@ void ConsoleGameEngine::SetCursorVisibility(bool isVisible) {
 	cursorInfo.bVisible = isVisible;  // Set the visibility
 	SetConsoleCursorInfo(_screanHandle, &cursorInfo);  // Apply the changes
 }
+#include <conio.h>
+bool ConsoleGameEngine::IsActiveWindow() {
+	return _currentWindow == GetForegroundWindow();
+}
+

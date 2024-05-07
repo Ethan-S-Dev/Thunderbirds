@@ -22,6 +22,7 @@ private:
 	HANDLE _screanHandle;
 	SMALL_RECT _windowRect;
 	float _physicsDelta;
+	HWND _currentWindow;
 public:
 	ConsoleGameEngine();
 public:
@@ -44,4 +45,5 @@ private:
 	void HandleProcessInput();
 	void HandlePhysicsInput();
 	void SetCursorVisibility(bool isVisible);
+	bool IsActiveWindow();
 };
