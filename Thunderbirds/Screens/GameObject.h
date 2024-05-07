@@ -1,10 +1,8 @@
 #pragma once
-
 #include <vector>
 
 #include "MoveResult.h"
 #include "../Core/Direction.h"
-#include "../Core/Point.h"
 #include "../Core/IController.h"
 #include "../Core/IPainter.h"
 
