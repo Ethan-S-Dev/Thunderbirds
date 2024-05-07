@@ -1,5 +1,8 @@
 #include "Ship.h"
 
+constexpr auto SPEED = 4.f;
+constexpr auto SHIP_TICK = 1.f / SPEED;
+
 bool Ship::CanFitInPositions(const std::vector<Point>& positions, const char name) {
 	switch (name)
 	{

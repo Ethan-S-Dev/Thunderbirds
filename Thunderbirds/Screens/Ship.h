@@ -4,8 +4,6 @@
 
 constexpr auto BIG_SHIP_NAME = '#';
 constexpr auto SMALL_SHIP_NAME = '@';
-constexpr auto SPEED = 4.f; // blocks per sec
-constexpr auto SHIP_TICK = 1.f / SPEED;
 
 class Ship : public GameObject {
 public:
