@@ -1,8 +1,5 @@
 #pragma once
-#include <limits>
-#include "../Extensions.h"
 #include "IScreen.h"
-#include "../Core/IPainter.h"
 #include "../Core/IController.h"
 
 constexpr auto BIG_SHIP_NAME = '#';
