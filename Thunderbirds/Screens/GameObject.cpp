@@ -1,4 +1,5 @@
 #include "GameObject.h"
+#include "../Extensions.h"
 
 GameObject::GameObject(char name) :
 	_name(name),

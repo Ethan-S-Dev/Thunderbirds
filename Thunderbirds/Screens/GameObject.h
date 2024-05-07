@@ -1,5 +1,7 @@
 #pragma once
-#include "../Extensions.h"
+
+#include <vector>
+
 #include "MoveResult.h"
 #include "../Core/Direction.h"
 #include "../Core/Point.h"

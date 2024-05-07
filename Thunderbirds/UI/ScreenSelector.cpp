@@ -78,7 +78,7 @@ void ScreenSelector::Draw(int screenWidth, int screenHight, IRenderer& renderer)
 	{
 		auto color = FG_BLACK | BG_BLUE;
 		if (_screenIndex == i) {
-			color = color | COMMON_LVB_REVERSE_VIDEO;
+			color = color | 0x4000;
 		}
 
 		renderer.DrawString(startX, startY + i + 1, _screensLines[i], color);

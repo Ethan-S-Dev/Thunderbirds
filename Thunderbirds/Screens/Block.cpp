@@ -1,4 +1,5 @@
 #include "Block.h"
+#include "../Extensions.h"
 
 Block::Block(char name, const IScreen* screen): 
 	GameObject(name),

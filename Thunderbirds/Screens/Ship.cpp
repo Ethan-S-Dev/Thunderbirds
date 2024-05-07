@@ -1,4 +1,5 @@
 #include "Ship.h"
+#include "../Extensions.h"
 
 constexpr auto SPEED = 4.f;
 constexpr auto SHIP_TICK = 1.f / SPEED;

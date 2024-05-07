@@ -1,4 +1,6 @@
 #pragma once
+#include <memory>
+
 #include "IScreen.h"
 #include "Exit.h"
 #include "Ship.h"

@@ -1,5 +1,6 @@
 #include <fstream>
 
+#include"../Extensions.h"
 #include "Screen.h"
 
 constexpr auto EMPTY_TILE = ' ';
