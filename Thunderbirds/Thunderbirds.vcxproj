@@ -132,6 +132,7 @@
     <ClCompile Include="Core\Buttons.cpp" />
     <ClCompile Include="Core\Direction.cpp" />
     <ClCompile Include="Core\Point.cpp" />
+    <ClCompile Include="Screens\Block.cpp" />
     <ClCompile Include="Screens\Exit.cpp" />
     <ClCompile Include="Screens\GameObject.cpp" />
     <ClCompile Include="Screens\Screen.cpp" />

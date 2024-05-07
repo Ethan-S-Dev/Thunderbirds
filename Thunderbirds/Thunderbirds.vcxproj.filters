@@ -16,6 +16,7 @@
     <ClCompile Include="Thunderbirds.cpp" />
     <ClCompile Include="Screens\Exit.cpp" />
     <ClCompile Include="Screens\Screen.cpp" />
+    <ClCompile Include="Screens\Block.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Extensions.h" />

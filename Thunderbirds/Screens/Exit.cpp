@@ -1,5 +1,5 @@
 #include "Exit.h"
-
+#include "Ship.h"
 
 Exit::Exit(char name, const IScreen* screen) :
 	GameObject(name),
