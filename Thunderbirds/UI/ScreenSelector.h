@@ -3,7 +3,7 @@
 #include <filesystem>
 
 #include "../Extensions.h"
-
+#include "../Rendering/Colors.h"
 #include "UIStack.h"
 #include "UIElement.h"
 #include "../Screens/Screen.h"
@@ -17,14 +17,14 @@ private:
 	std::function<void(Screen& screen)> _screenSelected;
 	UIStack& _menuStack;
 	int _screenIndex;
-	int _maxLength = 0;
+	int _maxLength;
 	std::vector<Screen> _screens;
 	std::vector<std::string> _screensLines;
-	std::string _title = "Select Screen:";
-	std::string _controles = "(ESC) <- Back | (W) ^ Up | (X) v Down | (S) - Select";
+	std::string _title;
+	std::string _controles;
 public:
-	ScreenSelector(UIStack& menuStack, std::function<void(Screen& screen)> screenSelected) :_screenSelected(screenSelected), _menuStack(menuStack), _screenIndex(0)
-	{}
+	ScreenSelector(UIStack& menuStack, std::function<void(Screen& screen)> screenSelected);
+public:
 	bool Load() {
 		for (const auto& entry : std::filesystem::directory_iterator(LEVELS_FOLDER)) {
 			auto ext = entry.path().extension().string();

@@ -3,6 +3,7 @@
 #include "../Core/Direction.h"
 #include "../Core/Point.h"
 #include "../Core/IController.h"
+#include "../Core/IPainter.h"
 
 enum class MoveFailReason : int {
 	HitWall,
