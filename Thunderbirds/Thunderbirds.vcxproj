@@ -135,6 +135,7 @@
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Rendering\Camera.cpp" />
     <ClCompile Include="Rendering\Rect.cpp" />
+    <ClCompile Include="UI\Menu.cpp" />
     <ClCompile Include="UI\ScreenSelector.cpp" />
     <ClCompile Include="UI\UIStack.cpp" />
   </ItemGroup>
