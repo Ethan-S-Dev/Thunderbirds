@@ -131,6 +131,7 @@
     <ClCompile Include="Core\Buttons.cpp" />
     <ClCompile Include="Core\Direction.cpp" />
     <ClCompile Include="Core\Point.cpp" />
+    <ClCompile Include="Screens\GameObject.cpp" />
     <ClCompile Include="UI\GameInfo.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Rendering\Camera.cpp" />

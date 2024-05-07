@@ -9,6 +9,9 @@
     <ClCompile Include="Rendering\Camera.cpp" />
     <ClCompile Include="UI\GameInfo.cpp" />
     <ClCompile Include="UI\UIStack.cpp" />
+    <ClCompile Include="Screens\GameObject.cpp" />
+    <ClCompile Include="UI\Menu.cpp" />
+    <ClCompile Include="UI\ScreenSelector.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Extensions.h" />

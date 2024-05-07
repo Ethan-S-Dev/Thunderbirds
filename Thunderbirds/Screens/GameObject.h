@@ -4,19 +4,7 @@
 #include "../Core/Point.h"
 #include "../Core/IController.h"
 #include "../Core/IPainter.h"
-
-enum class MoveFailReason : int {
-	HitWall,
-	HitShip
-};
-
-typedef struct {
-	bool CanBeMoved;
-	union {
-		MoveFailReason FailReason;
-		int MoveCapacityCost;
-	};
-} MoveResult;
+#include "MoveResult.h"
 
 class GameObject {
 private:
