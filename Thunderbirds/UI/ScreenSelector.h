@@ -10,6 +10,8 @@
 
 constexpr auto LEVELS_FOLDER = "Assets/Screens";
 
+constexpr auto INFO_PADING = 2;
+
 class ScreenSelector : public UIElement {
 private:
 	std::function<void(Screen& screen)> _screenSelected;

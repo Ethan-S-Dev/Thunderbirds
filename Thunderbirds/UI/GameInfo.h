@@ -1,8 +1,6 @@
 #pragma once
 #include "UIStack.h"
 
-constexpr auto INFO_PADING = 2;
-
 class GameInfo : public UIElement {
 	UIStack& _menuStack;
 	const std::string _fileName;

@@ -175,7 +175,7 @@ public:
 	void IRenderer::Fill(int x1, int y1, int x2, int y2, char c = 0xDB, short col = 0x000F) {
 		ConsoleGameEngine::Fill(x1, y1, x2, y2, c, col);
 	}
-	void IRenderer::DrawString(int x, int y, std::string s, short col = 0x000F) {
+	void IRenderer::DrawString(int x, int y, const std::string& s, short col = 0x000F) {
 		ConsoleGameEngine::DrawString(x, y, s, col);
 	}
 private:

@@ -1,9 +1,13 @@
 #include <functional>
 #include <fstream>
+#include <string>
+#include <algorithm>
+
 
 #include "GameInfo.h"
 #include "../Rendering/Colors.h"
-#include "../Extensions.h"
+
+constexpr auto INFO_PADING = 2;
 
 GameInfo::GameInfo(const std::string fileName, UIStack& menuStack) :
 	_menuStack(menuStack), 
@@ -60,13 +64,13 @@ void GameInfo::Draw(int screenWidth, int screenHight, IRenderer& renderer) const
 
 	renderer.Fill(infoStartX - INFO_PADING, infoStartY - INFO_PADING, infoStartX + _maxLength + INFO_PADING, infoEndY, '\0', BG_BLUE);
 	auto lineNum = 0;
-	auto numberOfVisableLines = min((infoEndY - INFO_PADING) - infoStartY, _gameInfoText.size());
+	auto numberOfVisableLines = std::min((infoEndY - INFO_PADING) - infoStartY, (int)_gameInfoText.size());
 
 	if (numberOfVisableLines >= _gameInfoText.size()) {
 		ConstHackedSetStartLineIndex(0);
 	}
 
-	auto maxIndex = min(numberOfVisableLines + _startLineIndex, _gameInfoText.size());
+	auto maxIndex = std::min(numberOfVisableLines + _startLineIndex, (int)_gameInfoText.size());
 
 	if (_gameInfoText.size() - _startLineIndex < numberOfVisableLines) {
 		ConstHackedSetStartLineIndex(_gameInfoText.size() - numberOfVisableLines);
