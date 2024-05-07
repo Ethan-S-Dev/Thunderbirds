@@ -2,6 +2,11 @@
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="Core\Buttons.cpp" />
+    <ClCompile Include="Core\Direction.cpp" />
+    <ClCompile Include="Core\Point.cpp" />
+    <ClCompile Include="Rendering\Rect.cpp" />
+    <ClCompile Include="Rendering\Camera.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Extensions.h" />
@@ -27,6 +32,7 @@
     <ClInclude Include="UI\GameInfo.h" />
     <ClInclude Include="UI\ScreenSelector.h" />
     <ClInclude Include="UI\UIStack.h" />
+    <ClInclude Include="Screens\MoveResult.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\Screens\level_2.screen" />

@@ -128,7 +128,12 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Core\Buttons.cpp" />
+    <ClCompile Include="Core\Direction.cpp" />
+    <ClCompile Include="Core\Point.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="Rendering\Camera.cpp" />
+    <ClCompile Include="Rendering\Rect.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Core\Buttons.h" />
@@ -145,6 +150,7 @@
     <ClInclude Include="Core\IPainter.h" />
     <ClInclude Include="Screens\IScreen.h" />
     <ClInclude Include="Core\Point.h" />
+    <ClInclude Include="Screens\MoveResult.h" />
     <ClInclude Include="Screens\Screen.h" />
     <ClInclude Include="Screens\Ship.h" />
     <ClInclude Include="Thunderbirds.h" />

@@ -4,6 +4,7 @@
 int main() {
 	Thunderbirds game;
 	game.Start();
+
 	return 0;
 }
 

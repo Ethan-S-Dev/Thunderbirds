@@ -1,14 +1,5 @@
 #pragma once
 
-typedef struct buttonState {
-	const bool Pressed;
-	const bool Released;
-	const bool Held;
-public:
-	buttonState(bool pressed, bool released, bool held) :
-		Pressed(pressed), Released(released), Held(held) {}
-} ButtonState;
-
 enum class Button : short {
 	Up,
 	Down,
@@ -22,6 +13,15 @@ enum class Button : short {
 	Exit,
 	Pause,
 	NumOfButtons
-}; 
+};
+
+struct ButtonState {
+	const bool Pressed;
+	const bool Released;
+	const bool Held;
+	ButtonState(bool pressed, bool released, bool held);
+};
+
+
 
 
