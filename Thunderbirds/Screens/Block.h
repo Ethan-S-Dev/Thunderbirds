@@ -1,7 +1,5 @@
 #pragma once
-#include "../Extensions.h"
 #include "IScreen.h"
-#include "../Core/IPainter.h"
 
 constexpr auto A_BLOCK_NAME = 'a';
 constexpr auto Z_BLOCK_NAME = 'z';
