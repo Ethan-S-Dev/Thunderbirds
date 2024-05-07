@@ -1,3 +1,5 @@
+#include <string>
+
 #include "Menu.h"
 #include "../Rendering/Colors.h"
 
