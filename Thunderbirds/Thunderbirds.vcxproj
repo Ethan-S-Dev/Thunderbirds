@@ -131,9 +131,11 @@
     <ClCompile Include="Core\Buttons.cpp" />
     <ClCompile Include="Core\Direction.cpp" />
     <ClCompile Include="Core\Point.cpp" />
+    <ClCompile Include="UI\GameInfo.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Rendering\Camera.cpp" />
     <ClCompile Include="Rendering\Rect.cpp" />
+    <ClCompile Include="UI\UIStack.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Core\Buttons.h" />
