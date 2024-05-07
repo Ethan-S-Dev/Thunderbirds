@@ -136,6 +136,7 @@
     <ClCompile Include="Screens\Exit.cpp" />
     <ClCompile Include="Screens\GameObject.cpp" />
     <ClCompile Include="Screens\Screen.cpp" />
+    <ClCompile Include="Screens\Ship.cpp" />
     <ClCompile Include="Thunderbirds.cpp" />
     <ClCompile Include="UI\GameInfo.cpp" />
     <ClCompile Include="main.cpp" />

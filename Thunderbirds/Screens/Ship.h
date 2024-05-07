@@ -12,34 +12,8 @@ constexpr auto SHIP_TICK = 1.f / SPEED;
 
 class Ship : public GameObject {
 public:
-	static bool CanFitInPositions(const std::vector<Point>& positions, const char name) {
-		switch (name)
-		{
-		case SMALL_SHIP_NAME: {
-			return CanFitInPositions(positions);
-		}
-		case BIG_SHIP_NAME: {
-			return positions.size() == 4;
-		}
-		default: {
-			return false;
-		}
-		}
-	}
-	static bool CanFitInPositions(const std::vector<Point>& positions) {
-		switch (positions.size())
-		{
-			case 2: {
-				return positions[0].Y == positions[1].Y;
-			}
-			case 4: {
-				return true;
-			}
-			default: {
-				return false;
-			}
-		}
-	}
+	static bool CanFitInPositions(const std::vector<Point>& positions, const char name);
+	static bool CanFitInPositions(const std::vector<Point>& positions);
 private:
 	bool _isActive;
 	const IScreen* _screen;
@@ -48,205 +22,23 @@ private:
 	bool _isDead;
 	int _carryCapacity;
 public:
-	Ship(char name, const IScreen* screen) : GameObject(name), _isActive(false), _screen(screen), _direction(0,0), _secCounter(0.f), _isDead(false), _carryCapacity(name == BIG_SHIP_NAME ? 6 : 2)
-	{}
+	Ship(char name, const IScreen* screen);
 public:
-	void Activete() {
-		_isActive = true;
-		_direction = { 0,0 };
-	}
-	void Deactivete() {
-		_isActive = false;
-		_direction = { 0,0 };
-	}
-	bool AddPosition(const Point point) {
-		if (contains(_positions, point))
-			return false;
-
-		if (!PointCanBeAdded(point))
-			return false;
-
-		_positions.push_back(point);
-		return true;
-	}
-	bool IsValid() const {
-		switch (Name())
-		{
-			case BIG_SHIP_NAME: {
-				return _positions.size() == 4;
-			}
-			case SMALL_SHIP_NAME: {
-				return _positions.size() == 2;
-			}
-			default: {
-					return false;
-			}
-		}
-	}
-	const Point& GetLowestPoint() const {
-		auto lowestIndex = 0;
-		for (auto i = 1; i < _positions.size(); i++)
-		{
-			if (_positions[i].Y > _positions[lowestIndex].Y) {
-				continue;
-			}
-
-			if (_positions[i].Y == _positions[lowestIndex].Y && _positions[i].X > _positions[lowestIndex].X) {
-				continue;
-			}
-
-			lowestIndex = i;
-		}
-
-		return _positions[lowestIndex];
-	}
-	const Point& GetHighestPoint() const {
-		auto lowestIndex = 0;
-		for (auto i = 1; i < _positions.size(); i++)
-		{
-			if (_positions[i].Y < _positions[lowestIndex].Y) {
-				continue;
-			}
-
-			if (_positions[i].Y == _positions[lowestIndex].Y && _positions[i].X < _positions[lowestIndex].X) {
-				continue;
-			}
-
-			lowestIndex = i;
-		}
-
-		return _positions[lowestIndex];
-	}
-	void Stop() {
-		_direction = {0,0};
-	}
-	bool IsDead() const {
-		return _isDead;
-	}
+	void Activete();
+	void Deactivete();
+	bool AddPosition(const Point point);
+	bool IsValid() const;
+	const Point& GetLowestPoint() const;
+	const Point& GetHighestPoint() const;
+	void Stop();
+	bool IsDead() const;
 public:
-	void Update(float elapsedTime, const IController& controller) override {
-		if (!_isActive) {
-			return;
-		}
-
-		UpdateDirectionFromController(controller);
-	}
-	void PhysicsUpdate(float elapsedTime, const IController& controller) override {
-		if (ShipCrashedByCarriedBlocks()) {
-			_isDead = true;
-			return;
-		}
-
-		if (!_isActive) {
-			_secCounter = 0;
-			return;
-		}
-
-		_secCounter += elapsedTime;
-		if (_secCounter < SHIP_TICK) {
-			return;
-		}
-		_secCounter -= SHIP_TICK;
-
-		if (_direction.nX == 0 && _direction.nY == 0) {
-			return;
-		}
-
-		auto moveResult = CanMoveBy(_direction);
-		if (!moveResult.CanBeMoved) {
-			_direction = { 0,0 };
-			return;
-		}
-
-		auto leftCarryCapacity = _carryCapacity;
-		if (_direction.nY != 1) {
-			leftCarryCapacity -= CalculateCarriedWeight();
-		}
-
-		if (moveResult.MoveCapacityCost > leftCarryCapacity) {
-			_isDead = true;
-		}
-
-		std::vector<GameObject*> moved;
-		Move(_direction, moved);
-	}
-	MoveResult CanBeMoved(Direction direction, std::vector<GameObject*>& entitiesNeedToBeMoved) const override {
-		// prevent circular move checks
-		if (contains(entitiesNeedToBeMoved, (GameObject*)this)) {
-			MoveResult res = {.CanBeMoved = true, .MoveCapacityCost = 0 };
-			return res;
-		}
-
-		MoveResult res{ false, MoveFailReason::HitShip};
-		return res;
-	}
-	MoveResult CanMoveBy(Direction direction) const override {
-		if (direction.nX == 0 && direction.nY == 0) {
-			MoveResult success = { .CanBeMoved = true };
-			return success;
-		}
-
-		if (HitWallByMoving(direction)) {
-			MoveResult failed = { .CanBeMoved = false, .FailReason = MoveFailReason::HitWall };
-			return failed;
-		}
-		MoveResult result = { .CanBeMoved = true, .MoveCapacityCost = 0 };
-		std::vector<GameObject*> needToBeMoved;
-		needToBeMoved.push_back((GameObject*)this);
-		auto entitiesInTheWay = FindEntitiesInTheWay(direction);
-		for (const auto entity : entitiesInTheWay)
-		{
-			auto res = entity->CanBeMoved(direction, needToBeMoved);
-			if (!res.CanBeMoved) {
-				return res;
-			}
-
-			result.MoveCapacityCost += res.MoveCapacityCost;
-		}
-
-		return result;
-	}
-	void Move(Direction direction, std::vector<GameObject*>& allReadyMoved) override {
-		if (direction.nX == 0 && direction.nY == 0) {
-			return;
-		}
-
-		// prevent circular move
-		if (contains(allReadyMoved, (GameObject*)this)) {
-			return;
-		}
-
-		allReadyMoved.push_back((GameObject*)this);
-
-		auto entitiesInTheWay = FindEntitiesInTheWay(direction);
-		for (auto& entity : entitiesInTheWay)
-		{
-			entity->Move(direction, allReadyMoved);
-		}
-
-		for (auto& point : _positions)
-		{
-			point.X += direction.nX;
-			point.Y += direction.nY;
-			auto newPoint = _screen->ClipToScreen(point);
-			point.X = newPoint.X;
-			point.Y = newPoint.Y;
-		}
-	}
-	std::vector<GameObject*> FindEntitiesInTheWay(Direction direction) const override {
-		std::vector<GameObject*> entitiesInTheWay;
-		for (auto entity : _screen->Entities()) {
-			if (entity->IsEqual(*this)) {
-				continue;
-			}
-
-			if (HitObjectByMoving(direction, *entity)) {
-				entitiesInTheWay.push_back(entity);
-			}
-		}
-
-		return entitiesInTheWay;
-	}
+	void Update(float elapsedTime, const IController& controller) override;
+	void PhysicsUpdate(float elapsedTime, const IController& controller) override;
+	MoveResult CanBeMoved(Direction direction, std::vector<GameObject*>& entitiesNeedToBeMoved) const override;
+	MoveResult CanMoveBy(Direction direction) const override;
+	void Move(Direction direction, std::vector<GameObject*>& allReadyMoved) override;
+	std::vector<GameObject*> FindEntitiesInTheWay(Direction direction) const override;
 private:
 	bool PointCanBeAdded(const Point point) const {
 		switch (Name())

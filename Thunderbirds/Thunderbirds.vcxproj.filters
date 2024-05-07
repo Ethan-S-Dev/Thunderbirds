@@ -17,6 +17,7 @@
     <ClCompile Include="Screens\Exit.cpp" />
     <ClCompile Include="Screens\Screen.cpp" />
     <ClCompile Include="Screens\Block.cpp" />
+    <ClCompile Include="Screens\Ship.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Extensions.h" />
