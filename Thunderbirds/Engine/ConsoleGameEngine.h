@@ -45,5 +45,5 @@ private:
 	void HandleProcessInput();
 	void HandlePhysicsInput();
 	void SetCursorVisibility(bool isVisible);
-	bool IsActiveWindow();
+	bool IsActiveWindow() const;
 };

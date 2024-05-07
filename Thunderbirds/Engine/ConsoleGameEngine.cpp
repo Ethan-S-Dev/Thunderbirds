@@ -181,8 +181,6 @@ void ConsoleGameEngine::HandleProcessInput() {
 				_processKeys[i].Released = true;
 				_processKeys[i].Held = false;
 			}
-			std::string value = std::format("({}) - ({}) - ({})", _processKeys[i].Pressed ? "Pressed" : "", _processKeys[i].Held ? "Held" : "", _processKeys[i].Released ? "Released" : "");
-			LogDebug("VK: {} is {}\n", i, value);
 		}
 
 		_processKeyOldState[i] = _processKeyNewState[i];
@@ -222,7 +220,7 @@ void ConsoleGameEngine::SetCursorVisibility(bool isVisible) {
 	SetConsoleCursorInfo(_screanHandle, &cursorInfo);  // Apply the changes
 }
 #include <conio.h>
-bool ConsoleGameEngine::IsActiveWindow() {
+bool ConsoleGameEngine::IsActiveWindow() const {
 	return _currentWindow == GetForegroundWindow();
 }
 
