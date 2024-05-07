@@ -128,10 +128,12 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Engine\ConsoleGameEngine.cpp" />
     <ClCompile Include="Core\Buttons.cpp" />
     <ClCompile Include="Core\Direction.cpp" />
     <ClCompile Include="Core\Point.cpp" />
     <ClCompile Include="Screens\GameObject.cpp" />
+    <ClCompile Include="Thunderbirds.cpp" />
     <ClCompile Include="UI\GameInfo.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Rendering\Camera.cpp" />
@@ -142,12 +144,14 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Core\Buttons.h" />
+    <ClInclude Include="Engine\KeyState.h" />
+    <ClInclude Include="Engine\VKCode.h" />
     <ClInclude Include="Rendering\Camera.h" />
     <ClInclude Include="Rendering\Colors.h" />
     <ClInclude Include="Rendering\IRenderer.h" />
     <ClInclude Include="Rendering\Rect.h" />
     <ClInclude Include="Screens\Block.h" />
-    <ClInclude Include="ConsoleGameEngine.h" />
+    <ClInclude Include="Engine\ConsoleGameEngine.h" />
     <ClInclude Include="Core\Direction.h" />
     <ClInclude Include="Core\IController.h" />
     <ClInclude Include="Screens\GameObject.h" />

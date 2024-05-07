@@ -12,6 +12,8 @@
     <ClCompile Include="Screens\GameObject.cpp" />
     <ClCompile Include="UI\Menu.cpp" />
     <ClCompile Include="UI\ScreenSelector.cpp" />
+    <ClCompile Include="Engine\ConsoleGameEngine.cpp" />
+    <ClCompile Include="Thunderbirds.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Extensions.h" />
@@ -20,7 +22,7 @@
     <ClInclude Include="Core\Point.h" />
     <ClInclude Include="Screens\Ship.h" />
     <ClInclude Include="Screens\Exit.h" />
-    <ClInclude Include="ConsoleGameEngine.h" />
+    <ClInclude Include="Engine\ConsoleGameEngine.h" />
     <ClInclude Include="Thunderbirds.h" />
     <ClInclude Include="Core\IPainter.h" />
     <ClInclude Include="Screens\GameObject.h" />
@@ -38,6 +40,8 @@
     <ClInclude Include="UI\ScreenSelector.h" />
     <ClInclude Include="UI\UIStack.h" />
     <ClInclude Include="Screens\MoveResult.h" />
+    <ClInclude Include="Engine\VKCode.h" />
+    <ClInclude Include="Engine\KeyState.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\Screens\level_2.screen" />
